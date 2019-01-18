@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         scoutingFragment = new ScoutingFragment();
         scheduleFragment = new ScheduleFragment();
 
-        fragmentTransaction.replace(R.id.fragment_main, scoutingFragment);
+        fragmentTransaction.replace(R.id.fragHolder, scoutingFragment);
 
         fragmentTransaction.commit();
         current = "SCOUTING";
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.fragment_main, scoutingFragment);
+                    transaction.replace(R.id.fragHolder, scoutingFragment);
                     transaction.commit();
                     current = "SCOUTING";
 
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                     FragmentTransaction transaction2 = getSupportFragmentManager().beginTransaction();
-                    transaction2.replace(R.id.fragment_main, scheduleFragment);
+                    transaction2.replace(R.id.fragHolder, scheduleFragment);
                     transaction2.commit();
                     current = "SCHEDULE";
 
