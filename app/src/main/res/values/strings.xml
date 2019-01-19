@@ -3,4 +3,18 @@
     <string name="title_scouting">Scouting</string>
     <string name="title_schedule">Schedule</string>
     <string name="title_analysis">Analysis</string>
+    <string name="team_name">Team Name</string>
+    <string name="team_number">Team Number</string>
+    <string name="finish">Finish</string>
+    <string name="title">Java Scouting 2</string>
+    <string name="can_they_land">Can they land?</string>
+    <string name="can_they_sample">Can they sample?</string>
+    <string name="can_they_claim">Can they claim?</string>
+    <string name="can_they_park">Can they park?</string>
+    <string name="autonomous">Autonomous</string>
+    <string name="tele_op">Tele-Op</string>
+    <string name="minerals_in_depot">Minerals in Depot</string>
+    <string name="minerals_in_lander">Minerals in Lander</string>
+    <string name="can_they_latch">Can they latch?</string>
+    <string name="endgame">Endgame</string>
 </resources>

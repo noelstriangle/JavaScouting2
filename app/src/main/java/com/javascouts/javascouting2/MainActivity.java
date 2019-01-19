@@ -1,5 +1,7 @@
 package com.javascouts.javascouting2;
 
+import android.arch.persistence.room.Room;
+import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -9,10 +11,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ActivityFragmentCommunication {
 
     String current;
     Fragment scoutingFragment, scheduleFragment;
+    private TeamDao dao;
+    public TeamDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +24,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        ActionBar actionBar = getSupportActionBar();
+
+        if(actionBar != null) {
+            actionBar.setTitle(R.string.title);
+        }
+
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -34,6 +44,14 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
         current = "SCOUTING";
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                db = Room.databaseBuilder(getApplicationContext(),
+                        TeamDatabase.class, "team-database").build();
+                dao = db.teamDao();
+            }
+        }).start();
 
     }
 
@@ -71,4 +89,21 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    @Override
+    public TeamDao getDao() {
+        return dao;
+    }
+
+    @Override
+    public void setDao(TeamDao dao) {
+        this.dao = dao;
+    }
+    @Override
+    public TeamDatabase getDb() {
+        return db;
+    }
+    @Override
+    public void setDb(TeamDatabase db) {
+        this.db = db;
+    }
 }

@@ -5,23 +5,25 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 /**
  * Created by Liam on 1/17/2019.
  */
 
-public class ScoutingFragment extends Fragment {
+public class AddTeamFragment extends Fragment {
 
-    private Fragment addTeamFragment;
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_scouting, parent, false);
+        return inflater.inflate(R.layout.fragment_addteam, parent, false);
 
     }
 
@@ -30,21 +32,20 @@ public class ScoutingFragment extends Fragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        addTeamFragment = new AddTeamFragment();
-
-        FloatingActionButton button = view.findViewById(R.id.scoutingAdd);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button finish = view.findViewById(R.id.finish);
+        finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+
+
+
                 FragmentManager fm = getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.fragHolder, addTeamFragment);
-                ft.addToBackStack("add");
-                ft.commit();
+                fm.popBackStack();
 
             }
         });
 
     }
+
 }
