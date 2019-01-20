@@ -7,4 +7,8 @@ public interface ActivityFragmentCommunication {
     TeamDao getDao();
     void setDao(TeamDao dao);
 
+    String getCurrent();
+
+    void setCurrent(String current);
+
 }

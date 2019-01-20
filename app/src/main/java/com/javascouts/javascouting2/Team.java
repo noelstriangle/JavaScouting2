@@ -7,7 +7,7 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity(tableName = "teams")
 public class Team {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public int id;
 
     @ColumnInfo(name="team_name")
@@ -35,9 +35,15 @@ public class Team {
     public int landerMinerals;
 
     @ColumnInfo(name="can_latch")
-    public int canLatch;
+    public boolean canLatch;
 
     @ColumnInfo(name="can_endPark")
-    public int canEndPark;
+    public boolean canEndPark;
+
+    @ColumnInfo(name = "auto_points")
+    public int autoPoints;
+
+    @ColumnInfo(name = "tele_points")
+    public int telePoints;
 
 }

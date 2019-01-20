@@ -1,28 +1,57 @@
 package com.javascouts.javascouting2;
 
 import android.arch.persistence.room.Room;
-import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity implements ActivityFragmentCommunication {
 
-    String current;
+    private String current;
     Fragment scoutingFragment, scheduleFragment;
+    AlertDialog dialog;
     private TeamDao dao;
-    public TeamDatabase db;
+    private TeamDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                db = Room.databaseBuilder(getApplicationContext(),
+                        TeamDatabase.class, "team-database")
+                        .fallbackToDestructiveMigration()
+                        .build();
+                dao = db.teamDao();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        scoutingFragment = new ScoutingFragment();
+                        scheduleFragment = new ScheduleFragment();
+
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+
+                        fragmentTransaction.replace(R.id.fragHolder, scoutingFragment);
+
+                        fragmentTransaction.commit();
+                        current = "SCOUTING";
+                    }
+                });
+            }
+        }).start();
 
         ActionBar actionBar = getSupportActionBar();
 
@@ -33,26 +62,22 @@ public class MainActivity extends AppCompatActivity implements ActivityFragmentC
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+    }
 
-        scoutingFragment = new ScoutingFragment();
-        scheduleFragment = new ScheduleFragment();
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-        fragmentTransaction.replace(R.id.fragHolder, scoutingFragment);
-
-        fragmentTransaction.commit();
-        current = "SCOUTING";
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                db = Room.databaseBuilder(getApplicationContext(),
-                        TeamDatabase.class, "team-database").build();
-                dao = db.teamDao();
-            }
-        }).start();
-
+        if ((db == null) || (dao == null)) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    db = Room.databaseBuilder(getApplicationContext(),
+                            TeamDatabase.class, "team-database").build();
+                    dao = db.teamDao();
+                }
+            }).start();
+        }
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -79,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements ActivityFragmentC
                     transaction2.replace(R.id.fragHolder, scheduleFragment);
                     transaction2.commit();
                     current = "SCHEDULE";
-
                     return true;
                 case R.id.navigation_analysis:
 
@@ -93,7 +117,6 @@ public class MainActivity extends AppCompatActivity implements ActivityFragmentC
     public TeamDao getDao() {
         return dao;
     }
-
     @Override
     public void setDao(TeamDao dao) {
         this.dao = dao;
@@ -106,4 +129,15 @@ public class MainActivity extends AppCompatActivity implements ActivityFragmentC
     public void setDb(TeamDatabase db) {
         this.db = db;
     }
+
+    @Override
+    public String getCurrent() {
+        return current;
+    }
+
+    @Override
+    public void setCurrent(String current) {
+        this.current = current;
+    }
+
 }

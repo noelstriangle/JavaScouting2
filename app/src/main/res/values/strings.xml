@@ -17,4 +17,8 @@
     <string name="minerals_in_lander">Minerals in Lander</string>
     <string name="can_they_latch">Can they latch?</string>
     <string name="endgame">Endgame</string>
+    <string name="reset_dialog">You are currently adding a team. If you switch to schedule, your current filled information will be reset.</string>
+    <string name="proceed">Proceed?</string>
+    <string name="yes">Yes</string>
+    <string name="there_are_no_teams">There are no teams.</string>
 </resources>
