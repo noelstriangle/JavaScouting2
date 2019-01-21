@@ -21,4 +21,9 @@
     <string name="proceed">Proceed?</string>
     <string name="yes">Yes</string>
     <string name="there_are_no_teams">There are no teams.</string>
+    <string name="delete_all">Delete All</string>
+    <string name="settings">Settings</string>
+    <string name="do_delete">Deleting all the teams will delete all the teams. Maybe export before you do this? Understand?</string>
+    <string name="delete_header">Delete Teams</string>
+    <string name="no">No</string>
 </resources>

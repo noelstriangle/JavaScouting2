@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,14 +29,13 @@ public class ScoutingFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-
         return inflater.inflate(R.layout.fragment_scouting, parent, false);
+
 
     }
 
     @Override
     public void onAttach(Context context) {
-        super.onAttach(context);
 
         try {
             callback = (ActivityFragmentCommunication) context;
@@ -45,22 +45,25 @@ public class ScoutingFragment extends Fragment {
                     + " must implement ActivityFragmentCommuncation");
         }
 
+
         Log.d("USER", "Scouting fragment: attached.");
+        super.onAttach(context);
 
     }
 
     @Override
     public void onDetach() {
-        super.onDetach();
 
         Log.d("USER", "Scouting fragment: detached.");
+        super.onDetach();
 
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        super.onViewCreated(view, savedInstanceState);
+        list = view.findViewById(R.id.scoutingList);
+        refreshList(getContext(), list);
 
         addTeamFragment = new AddTeamFragment();
 
@@ -79,32 +82,45 @@ public class ScoutingFragment extends Fragment {
             }
         });
 
-        list = view.findViewById(R.id.scoutingList);
-
         getActivity().findViewById(R.id.navigation).setVisibility(View.VISIBLE);
 
-        refreshList(getContext(), list);
+        final SwipeRefreshLayout srl = view.findViewById(R.id.refreshTeams);
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshList(getContext(), list);
+                srl.setRefreshing(false);
+            }
+        });
+
+        super.onViewCreated(view, savedInstanceState);
+
 
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-
-        cleanse();
+    public void onResume() {
+        //cleanse();
 
         refreshList(getContext(), list);
+        super.onResume();
 
     }
 
     public void cleanse() {
 
         if (teams != null) {
-            for (Team team : teams) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (Team team : teams) {
 
-                dao.delete(team);
+                        dao.delete(team);
 
-            }
+                    }
+                }
+            }).start();
+
         }
 
     }
@@ -113,18 +129,20 @@ public class ScoutingFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                teams = dao.getAllSortByTeamNumber();
-                Log.d("USER", "Teams: " + String.valueOf(teams.size()));
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (teams != null) {
-                            TeamAdapter ta = new TeamAdapter(context, R.layout.content_teamrow, teams);
-                            lv.setAdapter(ta);
-                            lv.setEmptyView(getActivity().findViewById(R.id.imageView));
+                if (dao != null) {
+                    teams = dao.getAllSortByTeamNumber();
+                    Log.d("USER", "Teams: " + String.valueOf(teams.size()));
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (teams != null) {
+                                TeamAdapter ta = new TeamAdapter(context, R.layout.content_teamrow, teams);
+                                lv.setAdapter(ta);
+                                lv.setEmptyView(getActivity().findViewById(R.id.imageView));
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         }).start();
 

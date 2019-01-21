@@ -17,10 +17,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/no_teams" />
 
-    <ListView
-        android:id="@+id/scoutingList"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refreshTeams"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/scoutingList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/scoutingAdd"

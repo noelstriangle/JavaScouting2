@@ -10,8 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -78,7 +78,9 @@ public class AddTeamFragment extends Fragment {
         });
 
         getActivity().findViewById(R.id.navigation).setVisibility(View.GONE);
-
+        if (getActivity().getActionBar() != null) {
+            getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         numT = view.findViewById(R.id.number);
         nameT = view.findViewById(R.id.name);
         depotT = view.findViewById(R.id.numDepot);
@@ -88,43 +90,7 @@ public class AddTeamFragment extends Fragment {
         claimB = view.findViewById(R.id.claimBox);
         parkB = view.findViewById(R.id.parkBox);
         latchB = view.findViewById(R.id.latchBox);
-        latchB.setVisibility(View.INVISIBLE);
         endParkB = view.findViewById(R.id.endParkBox);
-        landB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    latchB.setVisibility(View.VISIBLE);
-                    endParkB.setVisibility(View.INVISIBLE);
-                } else {
-                    latchB.setVisibility(View.INVISIBLE);
-                    endParkB.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-        latchB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    endParkB.setVisibility(View.INVISIBLE);
-                } else {
-                    endParkB.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-        endParkB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    latchB.setVisibility(View.INVISIBLE);
-                    landB.setVisibility(View.INVISIBLE);
-                } else {
-                    latchB.setVisibility(View.VISIBLE);
-                    landB.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
 
     }
 
@@ -145,7 +111,13 @@ public class AddTeamFragment extends Fragment {
 
                 } catch (NumberFormatException e) {
 
-                    //TODO: add team number unspecified message
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast toast = Toast.makeText(getContext(), "All fields must be filled.", Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
+                    });
                     return;
 
                 }
