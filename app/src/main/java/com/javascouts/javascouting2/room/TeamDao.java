@@ -1,4 +1,4 @@
-package com.javascouts.javascouting2;
+package com.javascouts.javascouting2.room;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
@@ -15,6 +15,9 @@ public interface TeamDao {
 
     @Query("SELECT * FROM teams WHERE team_number = :tN")
     Team getTeamByTeamNumber(int tN);
+
+    @Query("SELECT * FROM teams WHERE id = :id")
+    Team getTeamById(int id);
 
     @Query("SELECT * FROM teams ORDER BY team_number")
     List<Team> getAllSortByTeamNumber();

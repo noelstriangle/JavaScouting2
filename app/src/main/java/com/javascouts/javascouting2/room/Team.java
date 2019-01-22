@@ -1,4 +1,4 @@
-package com.javascouts.javascouting2;
+package com.javascouts.javascouting2.room;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;

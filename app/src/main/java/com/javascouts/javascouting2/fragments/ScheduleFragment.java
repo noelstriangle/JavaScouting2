@@ -1,4 +1,4 @@
-package com.javascouts.javascouting2;
+package com.javascouts.javascouting2.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,9 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * Created by Liam on 1/17/2019.
- */
+import com.javascouts.javascouting2.R;
 
 public class ScheduleFragment extends Fragment {
 

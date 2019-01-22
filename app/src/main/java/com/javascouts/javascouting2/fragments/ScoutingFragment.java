@@ -1,4 +1,4 @@
-package com.javascouts.javascouting2;
+package com.javascouts.javascouting2.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,18 +11,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.util.List;
+import com.javascouts.javascouting2.adapters.ActivityFragmentCommunication;
+import com.javascouts.javascouting2.R;
+import com.javascouts.javascouting2.room.Team;
+import com.javascouts.javascouting2.adapters.TeamAdapter;
+import com.javascouts.javascouting2.room.TeamDao;
 
-/**
- * Created by Liam on 1/17/2019.
- */
+import java.util.List;
 
 public class ScoutingFragment extends Fragment {
 
     ActivityFragmentCommunication callback;
     private Fragment addTeamFragment;
+    private Fragment teamDetailsFragment;
     List<Team> teams;
     private TeamDao dao;
     ListView list;
@@ -30,8 +34,6 @@ public class ScoutingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_scouting, parent, false);
-
-
     }
 
     @Override
@@ -62,10 +64,11 @@ public class ScoutingFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
+        addTeamFragment = new AddTeamFragment();
+        teamDetailsFragment = new TeamDetailsFragment();
+
         list = view.findViewById(R.id.scoutingList);
         refreshList(getContext(), list);
-
-        addTeamFragment = new AddTeamFragment();
 
         FloatingActionButton button = view.findViewById(R.id.scoutingAdd);
         button.setOnClickListener(new View.OnClickListener() {
@@ -107,24 +110,6 @@ public class ScoutingFragment extends Fragment {
 
     }
 
-    public void cleanse() {
-
-        if (teams != null) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    for (Team team : teams) {
-
-                        dao.delete(team);
-
-                    }
-                }
-            }).start();
-
-        }
-
-    }
-
     public void refreshList(final Context context, final ListView lv) {
         new Thread(new Runnable() {
             @Override
@@ -139,6 +124,19 @@ public class ScoutingFragment extends Fragment {
                                 TeamAdapter ta = new TeamAdapter(context, R.layout.content_teamrow, teams);
                                 lv.setAdapter(ta);
                                 lv.setEmptyView(getActivity().findViewById(R.id.imageView));
+                                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                        FragmentManager fm = getFragmentManager();
+                                        FragmentTransaction ft = fm.beginTransaction();
+                                        Bundle b = new Bundle();
+                                        b.putInt("ID",teams.get(i).id);
+                                        teamDetailsFragment.setArguments(b);
+                                        ft.replace(R.id.fragHolder, teamDetailsFragment);
+                                        ft.addToBackStack("details");
+                                        ft.commit();
+                                    }
+                                });
                             }
                         }
                     });

@@ -14,6 +14,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.javascouts.javascouting2.adapters.ActivityFragmentCommunication;
+import com.javascouts.javascouting2.fragments.ScheduleFragment;
+import com.javascouts.javascouting2.fragments.ScoutingFragment;
+import com.javascouts.javascouting2.room.Team;
+import com.javascouts.javascouting2.room.TeamDao;
+import com.javascouts.javascouting2.room.TeamDatabase;
+
 public class MainActivity extends AppCompatActivity implements ActivityFragmentCommunication {
 
     private String current;
@@ -172,9 +179,6 @@ public class MainActivity extends AppCompatActivity implements ActivityFragmentC
         }
         return true;
     }
-
-
-
 
     @Override
     public TeamDao getDao() {

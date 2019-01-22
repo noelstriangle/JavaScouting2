@@ -1,4 +1,4 @@
-package com.javascouts.javascouting2;
+package com.javascouts.javascouting2.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,11 +13,12 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.List;
+import com.javascouts.javascouting2.adapters.ActivityFragmentCommunication;
+import com.javascouts.javascouting2.R;
+import com.javascouts.javascouting2.room.Team;
+import com.javascouts.javascouting2.room.TeamDao;
 
-/**
- * Created by Liam on 1/17/2019.
- */
+import java.util.List;
 
 public class AddTeamFragment extends Fragment {
 

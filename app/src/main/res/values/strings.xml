@@ -26,4 +26,12 @@
     <string name="do_delete">Deleting all the teams will delete all the teams. Maybe export before you do this? Understand?</string>
     <string name="delete_header">Delete Teams</string>
     <string name="no">No</string>
+    <string name="question_land">Can land?</string>
+    <string name="question_sample">Can sample?</string>
+    <string name="question_claim">Can claim?</string>
+    <string name="question_park">Can park?</string>
+    <string name="question_depot">Minerals in depot:</string>
+    <string name="question_lander">Minerals in lander:</string>
+    <string name="question_latch">Can latch?</string>
+    <string name="question_endpark">Can park?</string>
 </resources>

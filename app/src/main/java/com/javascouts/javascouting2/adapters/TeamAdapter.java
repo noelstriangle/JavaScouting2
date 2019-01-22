@@ -1,4 +1,4 @@
-package com.javascouts.javascouting2;
+package com.javascouts.javascouting2.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,17 +9,20 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.javascouts.javascouting2.R;
+import com.javascouts.javascouting2.room.Team;
+
 import java.util.List;
 
 public class TeamAdapter extends ArrayAdapter<Team> {
 
-    TeamAdapter(Context context, int textViewResourceId) {
+    public TeamAdapter(Context context, int textViewResourceId) {
 
         super(context, textViewResourceId);
 
     }
 
-    TeamAdapter(Context context, int resource, List<Team> items) {
+    public TeamAdapter(Context context, int resource, List<Team> items) {
 
         super(context, resource, items);
 
@@ -29,7 +32,7 @@ public class TeamAdapter extends ArrayAdapter<Team> {
     @NonNull
     @SuppressLint("InflateParams")
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
         View v = convertView;
 
