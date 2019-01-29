@@ -1,6 +1,5 @@
 package com.javascouts.javascouting2;
 
-import android.arch.persistence.room.Room;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,18 +14,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.javascouts.javascouting2.adapters.ActivityFragmentCommunication;
-import com.javascouts.javascouting2.fragments.ScheduleFragment;
+import com.javascouts.javascouting2.fragments.MatchesFragment;
 import com.javascouts.javascouting2.fragments.ScoutingFragment;
 import com.javascouts.javascouting2.room.Team;
-import com.javascouts.javascouting2.room.TeamDao;
+import com.javascouts.javascouting2.room.UserDao;
 import com.javascouts.javascouting2.room.TeamDatabase;
 
 public class MainActivity extends AppCompatActivity implements ActivityFragmentCommunication {
 
     private String current;
-    Fragment scoutingFragment, scheduleFragment;
+    Fragment scoutingFragment, matchesFragment;
     AlertDialog dialog;
-    private TeamDao dao;
+    private UserDao dao;
     private TeamDatabase db;
     ActionBar bar;
 
@@ -39,16 +38,13 @@ public class MainActivity extends AppCompatActivity implements ActivityFragmentC
         new Thread(new Runnable() {
             @Override
             public void run() {
-                db = Room.databaseBuilder(getApplicationContext(),
-                        TeamDatabase.class, "team-database")
-                        .fallbackToDestructiveMigration()
-                        .build();
-                dao = db.teamDao();
+                db = TeamDatabase.getTeamDatabase(getApplicationContext());
+                dao = db.getTeamDao();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         scoutingFragment = new ScoutingFragment();
-                        scheduleFragment = new ScheduleFragment();
+                        matchesFragment = new MatchesFragment();
 
                         FragmentManager fragmentManager = getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -81,9 +77,8 @@ public class MainActivity extends AppCompatActivity implements ActivityFragmentC
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    db = Room.databaseBuilder(getApplicationContext(),
-                            TeamDatabase.class, "team-database").build();
-                    dao = db.teamDao();
+                    db = TeamDatabase.getTeamDatabase(getApplicationContext());
+                    dao = db.getTeamDao();
                 }
             }).start();
         }
@@ -110,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements ActivityFragmentC
                         return true;
                     }
                     FragmentTransaction transaction2 = getSupportFragmentManager().beginTransaction();
-                    transaction2.replace(R.id.fragHolder, scheduleFragment);
+                    transaction2.replace(R.id.fragHolder, matchesFragment);
                     transaction2.commit();
                     current = "SCHEDULE";
                     return true;
@@ -145,9 +140,9 @@ public class MainActivity extends AppCompatActivity implements ActivityFragmentC
                             @Override
                             public void run() {
 
-                                for (Team team : dao.getAll()) {
+                                for (Team team : dao.getAllTeams()) {
 
-                                    dao.delete(team);
+                                    dao.deleteTeam(team);
 
                                 }
 
@@ -181,11 +176,11 @@ public class MainActivity extends AppCompatActivity implements ActivityFragmentC
     }
 
     @Override
-    public TeamDao getDao() {
+    public UserDao getDao() {
         return dao;
     }
     @Override
-    public void setDao(TeamDao dao) {
+    public void setDao(UserDao dao) {
         this.dao = dao;
     }
     @Override

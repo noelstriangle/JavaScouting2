@@ -34,4 +34,10 @@
     <string name="question_lander">Minerals in lander:</string>
     <string name="question_latch">Can latch?</string>
     <string name="question_endpark">Can park?</string>
+    <string name="no_matches">There are no matches.</string>
+    <string name="red_team_1">Red Team 1</string>
+    <string name="red_team_2">Red Team 2</string>
+    <string name="blue_team_1">Blue Team 1</string>
+    <string name="blue_team_2">Blue Team 2</string>
+    <string name="add_1_pleasae">Please add at least 4 teams.</string>
 </resources>

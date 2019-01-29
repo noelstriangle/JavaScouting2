@@ -13,27 +13,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import com.javascouts.javascouting2.adapters.ActivityFragmentCommunication;
 import com.javascouts.javascouting2.R;
-import com.javascouts.javascouting2.room.Team;
+import com.javascouts.javascouting2.adapters.ActivityFragmentCommunication;
+import com.javascouts.javascouting2.adapters.MatchAdapter;
 import com.javascouts.javascouting2.adapters.TeamAdapter;
+import com.javascouts.javascouting2.room.Match;
+import com.javascouts.javascouting2.room.Team;
 import com.javascouts.javascouting2.room.UserDao;
 
 import java.util.List;
 
-public class ScoutingFragment extends Fragment {
+public class MatchesFragment extends Fragment {
 
     ActivityFragmentCommunication callback;
-    private Fragment addTeamFragment;
-    private Fragment teamDetailsFragment;
-    List<Team> teams;
+    private Fragment addMatchFragment;
+    private Fragment matchDetailsFragment;
+    List<Match> matches;
     private UserDao dao;
     ListView list;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_scouting, parent, false);
+        return inflater.inflate(R.layout.fragment_matches, parent, false);
     }
 
     @Override
@@ -46,7 +49,6 @@ public class ScoutingFragment extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement ActivityFragmentCommuncation");
         }
-
 
         Log.d("USER", "Scouting fragment: attached.");
         super.onAttach(context);
@@ -64,30 +66,50 @@ public class ScoutingFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        addTeamFragment = new AddTeamFragment();
-        teamDetailsFragment = new TeamDetailsFragment();
+        addMatchFragment = new AddMatchFragment();
+        matchDetailsFragment = new MatchDetailsFragment();
 
-        list = view.findViewById(R.id.scoutingList);
+        list = view.findViewById(R.id.matchesList);
         refreshList(getContext(), list);
 
-        FloatingActionButton button = view.findViewById(R.id.scoutingAdd);
+        FloatingActionButton button = view.findViewById(R.id.matchesAdd);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                callback.setCurrent("ADD_TEAM");
-                FragmentManager fm = getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.fragHolder, addTeamFragment);
-                ft.addToBackStack("add");
-                ft.commit();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(dao.getAllTeams().size() > 3) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.setCurrent("ADD_MATCH");
+                                    FragmentManager fm = getFragmentManager();
+                                    FragmentTransaction ft = fm.beginTransaction();
+                                    ft.replace(R.id.fragHolder, addMatchFragment);
+                                    ft.addToBackStack("add_match");
+                                    ft.commit();
+                                }
+                            });
+                        } else {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast t1 = new Toast(getContext()).makeText(getContext(), R.string.add_1_pleasae, Toast.LENGTH_SHORT);
+                                    t1.show();
 
+                                }
+                            });
+                         }
+                    }
+                }).start();
             }
         });
 
         getActivity().findViewById(R.id.navigation).setVisibility(View.VISIBLE);
 
-        final SwipeRefreshLayout srl = view.findViewById(R.id.refreshTeams);
+        final SwipeRefreshLayout srl = view.findViewById(R.id.refreshMatches);
         srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -115,14 +137,14 @@ public class ScoutingFragment extends Fragment {
             @Override
             public void run() {
                 if (dao != null) {
-                    teams = dao.getAllSortByTeamNumber();
-                    Log.d("USER", "Teams: " + String.valueOf(teams.size()));
+                    matches = dao.getAllMatchesSortByMatchNumber();
+                    Log.d("USER", "Matches: " + String.valueOf(matches.size()));
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (teams != null) {
-                                TeamAdapter ta = new TeamAdapter(context, R.layout.content_teamrow, teams);
-                                lv.setAdapter(ta);
+                            if (matches != null) {
+                                MatchAdapter ma = new MatchAdapter(context, R.layout.content_teamrow, matches);
+                                lv.setAdapter(ma);
                                 lv.setEmptyView(getActivity().findViewById(R.id.imageView));
                                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
@@ -130,9 +152,9 @@ public class ScoutingFragment extends Fragment {
                                         FragmentManager fm = getFragmentManager();
                                         FragmentTransaction ft = fm.beginTransaction();
                                         Bundle b = new Bundle();
-                                        b.putInt("ID",teams.get(i).id);
-                                        teamDetailsFragment.setArguments(b);
-                                        ft.replace(R.id.fragHolder, teamDetailsFragment);
+                                        b.putInt("ID",matches.get(i).id);
+                                        matchDetailsFragment.setArguments(b);
+                                        ft.replace(R.id.fragHolder, matchDetailsFragment);
                                         ft.addToBackStack("details");
                                         ft.commit();
                                     }

@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.javascouts.javascouting2.adapters.ActivityFragmentCommunication;
 import com.javascouts.javascouting2.R;
 import com.javascouts.javascouting2.room.Team;
-import com.javascouts.javascouting2.room.TeamDao;
+import com.javascouts.javascouting2.room.UserDao;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class AddTeamFragment extends Fragment {
     private int num, depot, lander;
     private String name;
     private boolean canLand, canSample, canClaim, canPark, canLatch, canEndPark;
-    private TeamDao dao;
+    private UserDao dao;
     private List<Team> teams;
 
     @Override
@@ -100,7 +100,7 @@ public class AddTeamFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                teams = dao.getAll();
+                teams = dao.getAllTeams();
                 Team tempTeam = new Team();
 
                 try {
@@ -171,7 +171,7 @@ public class AddTeamFragment extends Fragment {
                 }
                 tempTeam.telePoints = points;
 
-                dao.insertAll(tempTeam);
+                dao.insertTeams(tempTeam);
                 Log.d("USER", "Team added: " + name);
 
                 getActivity().runOnUiThread(new Runnable() {
