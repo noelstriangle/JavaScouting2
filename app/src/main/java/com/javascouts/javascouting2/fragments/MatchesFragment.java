@@ -1,14 +1,19 @@
 package com.javascouts.javascouting2.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -39,6 +44,11 @@ public class MatchesFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_matches, parent, false);
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
     @Override
     public void onAttach(Context context) {
 
@@ -166,6 +176,62 @@ public class MatchesFragment extends Fragment {
             }
         }).start();
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        menu.findItem(R.id.cleanseTeams).setVisible(false);
+        super.onCreateOptionsMenu(menu,menuInflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.cleanseMatches:
+                AlertDialog.Builder deleteBuilder = new AlertDialog.Builder(getContext());
+
+                deleteBuilder.setTitle(R.string.delete_matches);
+
+                deleteBuilder.setMessage(R.string.do_delete2);
+
+                deleteBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                for (Match match : dao.getAllMatches()) {
+
+                                    dao.deleteMatch(match);
+
+                                }
+
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        getActivity().recreate();
+                                    }
+                                });
+                            }
+                        }).start();
+
+                    }
+                });
+                deleteBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+                AlertDialog deleteDialog = deleteBuilder.create();
+                deleteDialog.show();
+
+                break;
+
+            case R.id.settings:
+                return false;
+        }
+        return true;
     }
 
 }

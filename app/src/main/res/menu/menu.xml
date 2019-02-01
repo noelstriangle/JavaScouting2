@@ -2,8 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/cleanse"
-        android:title="@string/delete_all" />
+        android:id="@+id/cleanseTeams"
+        android:title="@string/delete_all_teams" />
+    <item
+        android:id="@+id/cleanseMatches"
+        android:title="@string/delete_all_matches" />
     <item
         android:id="@+id/settings"
         android:title="@string/settings" />

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +13,11 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.javascouts.javascouting2.R;
 import com.javascouts.javascouting2.adapters.ActivityFragmentCommunication;
+import com.javascouts.javascouting2.room.Match;
 import com.javascouts.javascouting2.room.Team;
 import com.javascouts.javascouting2.room.UserDao;
 
@@ -23,7 +26,8 @@ public class MatchDetailsFragment extends Fragment {
     ActivityFragmentCommunication callback;
     private UserDao dao;
     private int id;
-    Team team;
+    Team r1, r2, b1, b2;
+    Match match;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -47,7 +51,6 @@ public class MatchDetailsFragment extends Fragment {
         try {
             callback = (ActivityFragmentCommunication) context;
             dao = callback.getDao();
-
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement ActivityFragmentCommuncation");
@@ -63,24 +66,24 @@ public class MatchDetailsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        final TextView name = view.findViewById(R.id.detailName);
-        final TextView number = view.findViewById(R.id.detailNum);
-        final ConstraintLayout cl = view.findViewById(R.id.constraintLayout);
-        final TableLayout tl = view.findViewById(R.id.teamTable);
+        final TextView number = view.findViewById(R.id.matchNum);
+        final TableLayout tl = view.findViewById(R.id.matchTable);
 
         if (dao != null) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    team = dao.getTeamById(id);
+                    match = dao.getMatchById(id);
+                    Log.d("USER","Match number received: "+String.valueOf(match.matchNumber));
+                    r1 = dao.getTeamById(match.red1);
+                    r2 = dao.getTeamById(match.red2);
+                    b1 = dao.getTeamById(match.blue1);
+                    b2 = dao.getTeamById(match.blue2);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if(team != null) {
-                                name.setText(team.teamName);
-                                number.setText(Integer.valueOf(team.teamNumber).toString());
-                                populateTable(team, tl);
-                            }
+                                number.setText(String.valueOf(match.matchNumber));
+                                populateTable(tl,r1,r2,b1,b2);
                         }
                     });
                 }
@@ -88,93 +91,153 @@ public class MatchDetailsFragment extends Fragment {
         } else {
             Log.d("USER","DAO is null.");
         }
+
     }
 
-    @SuppressLint("SetTextI18n")
-    void populateTable(Team team, TableLayout tl) {
+    private TableRow createRow(Team r1, Team r2, Team b1, Team b2, String id) {
 
-        TextView tempq = new TextView(getContext());
-        TextView tempa = new TextView(getContext());
-        TableRow tempr = new TableRow(getContext());
+        TableRow temp = new TableRow(getContext());
 
-        tempq.setText(R.string.question_land);
-        tempa.setText(convertBooltoString(team.canLand));
-        tempq.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        tempr.addView(tempq);
-        tempr.addView(tempa);
-        tl.addView(tempr,0);
-        tempr = new TableRow(getContext());
-        tempq = new TextView(getContext());
-        tempa = new TextView(getContext());
-        tempq.setText(R.string.question_sample);
-        tempq.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        tempa.setText(convertBooltoString(team.canSample));
-        tempr.addView(tempq);
-        tempr.addView(tempa);
-        tl.addView(tempr,1);
-        tempr = new TableRow(getContext());
-        tempq = new TextView(getContext());
-        tempa = new TextView(getContext());
-        tempq.setText(R.string.question_claim);
-        tempq.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        tempa.setText(convertBooltoString(team.canClaim));
-        tempr.addView(tempq);
-        tempr.addView(tempa);
-        tl.addView(tempr,2);
-        tempr = new TableRow(getContext());
-        tempq = new TextView(getContext());
-        tempa = new TextView(getContext());
-        tempq.setText(R.string.question_park);
-        tempq.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        tempa.setText(convertBooltoString(team.canLand));
-        tempr.addView(tempq);
-        tempr.addView(tempa);
-        tl.addView(tempr,3);
-        tempr = new TableRow(getContext());
-        tempq = new TextView(getContext());
-        tempa = new TextView(getContext());
-        tempq.setText(R.string.question_depot);
-        tempq.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        tempa.setText(Integer.toString(team.depotMinerals));
-        tempr.addView(tempq);
-        tempr.addView(tempa);
-        tl.addView(tempr,4);
-        tempr = new TableRow(getContext());
-        tempq = new TextView(getContext());
-        tempa = new TextView(getContext());
-        tempq.setText(R.string.question_lander);
-        tempq.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        tempa.setText(Integer.toString(team.landerMinerals));
-        tempr.addView(tempq);
-        tempr.addView(tempa);
-        tl.addView(tempr,5);
-        tempr = new TableRow(getContext());
-        tempq = new TextView(getContext());
-        tempa = new TextView(getContext());
-        tempq.setText(R.string.question_latch);
-        tempq.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        tempa.setText(convertBooltoString(team.canLatch));
-        tempr.addView(tempq);
-        tempr.addView(tempa);
-        tl.addView(tempr,6);
-        tempr = new TableRow(getContext());
-        tempq = new TextView(getContext());
-        tempa = new TextView(getContext());
-        tempq.setText(R.string.question_endpark);
-        tempq.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        tempa.setText(convertBooltoString(team.canEndPark));
-        tempr.addView(tempq);
-        tempr.addView(tempa);
-        tl.addView(tempr,7);
-        tl.setStretchAllColumns(true);
+        TextView tempView = new TextView(getContext());
+        tempView.setText(id);
+        tempView.setTextSize(22);
+        tempView.setBackground(getActivity().getDrawable(R.drawable.line_divider));
+        tempView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
+        tempView = new TextView(getContext());
+        tempView.setText(getInfo(id,r1),0,getInfo(id,r1).length);
+        tempView.setTextSize(22);
+        tempView.setBackground(getActivity().getDrawable(R.drawable.line_divider));
+        tempView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        tempView.setTextColor(getResources().getColor(R.color.red));
+
+        tempView = new TextView(getContext());
+        tempView.setText(getInfo(id,r2),0,getInfo(id,r1).length);
+        tempView.setTextSize(22);
+        tempView.setBackground(getActivity().getDrawable(R.drawable.line_divider));
+        tempView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        tempView.setTextColor(getResources().getColor(R.color.red));
+
+        tempView = new TextView(getContext());
+        tempView.setText(getInfo(id,b1),0,getInfo(id,r1).length);
+        tempView.setTextSize(22);
+        tempView.setBackground(getActivity().getDrawable(R.drawable.line_divider));
+        tempView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        tempView.setTextColor(getResources().getColor(R.color.blue));
+
+        tempView = new TextView(getContext());
+        tempView.setText(getInfo(id,b2),0,getInfo(id,r1).length);
+        tempView.setTextSize(22);
+        tempView.setBackground(getActivity().getDrawable(R.drawable.line_divider));
+        tempView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        tempView.setTextColor(getResources().getColor(R.color.blue));
+
+        return temp;
+
     }
 
-    String convertBooltoString(boolean b) {
-        if(b) {
-            return getString(R.string.yes);
-        } else {
-            return getString(R.string.no);
+
+    private void populateTable(final TableLayout tl, Team r1, Team r2, Team b1, Team b2) {
+
+        try {
+
+            tl.addView(createRow(r1,r2,b1,b2,"NUMBER"),0);
+            tl.addView(createRow(r1,r2,b1,b2,"LAND"),1);
+            tl.addView(createRow(r1,r2,b1,b2,"SAMPLE"),2);
+            tl.addView(createRow(r1,r2,b1,b2,"CLAIM"),3);
+            tl.addView(createRow(r1,r2,b1,b2,"NUM DEPOT"),4);
+            tl.addView(createRow(r1,r2,b1,b2,"NUM LANDER"),5);
+            tl.addView(createRow(r1,r2,b1,b2,"PARK"),6);
+            tl.addView(createRow(r1,r2,b1,b2,"LATCH"),7);
+
+        } catch(NullPointerException e) {
+
+            Toast toast = new Toast(getContext()).makeText(getContext(), "One or more teams don't exist.", Toast.LENGTH_SHORT);
+            toast.show();
+            FragmentManager fm = getFragmentManager();
+            fm.popBackStack();
+
         }
+    }
+
+    public char[] getInfo(String id, Team team) {
+
+        if(id.equals("NUMBER")) {
+            return team.teamName.toCharArray();
+        }
+        if(id.equals("LAND")) {
+            if(team.canLand) {
+                char[] temp = new char[1];
+                temp[0] = '\u2713';
+                return temp;
+            } else {
+                char[] temp = new char[1];
+                temp[0] = '\u2717';
+                return temp;
+            }
+        }
+        if(id.equals("LAND")) {
+            if(team.canLand) {
+                char[] temp = new char[1];
+                temp[0] = '\u2713';
+                return temp;
+            } else {
+                char[] temp = new char[1];
+                temp[0] = '\u2717';
+                return temp;
+            }
+        }
+        if(id.equals("SAMPLE")) {
+            if(team.canSample) {
+                char[] temp = new char[1];
+                temp[0] = '\u2713';
+                return temp;
+            } else {
+                char[] temp = new char[1];
+                temp[0] = '\u2717';
+                return temp;
+            }
+        }
+        if(id.equals("CLAIM")) {
+            if(team.canClaim) {
+                char[] temp = new char[1];
+                temp[0] = '\u2713';
+                return temp;
+            } else {
+                char[] temp = new char[1];
+                temp[0] = '\u2717';
+                return temp;
+            }
+        }
+        if(id.equals("NUM DEPOT")) {
+            return String.valueOf(team.depotMinerals).toCharArray();
+        }
+        if(id.equals("NUM LANDER")) {
+            return String.valueOf(team.landerMinerals).toCharArray();
+        }
+        if(id.equals("PARK")) {
+            if(team.canPark) {
+                char[] temp = new char[1];
+                temp[0] = '\u2713';
+                return temp;
+            } else {
+                char[] temp = new char[1];
+                temp[0] = '\u2717';
+                return temp;
+            }
+        }
+        if(id.equals("LATCH")) {
+            if(team.canLatch) {
+                char[] temp = new char[1];
+                temp[0] = '\u2713';
+                return temp;
+            } else {
+                char[] temp = new char[1];
+                temp[0] = '\u2717';
+                return temp;
+            }
+        }
+        return new char[]{'P'};
     }
 
 }

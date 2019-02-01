@@ -1,14 +1,19 @@
 package com.javascouts.javascouting2.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -37,7 +42,15 @@ public class ScoutingFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
+    }
+
+    @Override
     public void onAttach(Context context) {
+        super.onAttach(context);
 
         try {
             callback = (ActivityFragmentCommunication) context;
@@ -46,10 +59,7 @@ public class ScoutingFragment extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement ActivityFragmentCommuncation");
         }
-
-
         Log.d("USER", "Scouting fragment: attached.");
-        super.onAttach(context);
 
     }
 
@@ -58,11 +68,11 @@ public class ScoutingFragment extends Fragment {
 
         Log.d("USER", "Scouting fragment: detached.");
         super.onDetach();
-
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         addTeamFragment = new AddTeamFragment();
         teamDetailsFragment = new TeamDetailsFragment();
@@ -95,18 +105,13 @@ public class ScoutingFragment extends Fragment {
                 srl.setRefreshing(false);
             }
         });
-
-        super.onViewCreated(view, savedInstanceState);
-
-
     }
 
     @Override
     public void onResume() {
-        //cleanse();
+        super.onResume();
 
         refreshList(getContext(), list);
-        super.onResume();
 
     }
 
@@ -144,6 +149,62 @@ public class ScoutingFragment extends Fragment {
             }
         }).start();
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        menu.findItem(R.id.cleanseMatches).setVisible(false);
+        super.onCreateOptionsMenu(menu,menuInflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.cleanseTeams:
+                AlertDialog.Builder deleteBuilder = new AlertDialog.Builder(getContext());
+
+                deleteBuilder.setTitle(R.string.delete_header);
+
+                deleteBuilder.setMessage(R.string.do_delete);
+
+                deleteBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                for (Team team : dao.getAllTeams()) {
+
+                                    dao.deleteTeam(team);
+
+                                }
+
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        getActivity().recreate();
+                                    }
+                                });
+                            }
+                        }).start();
+
+                    }
+                });
+                deleteBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+                AlertDialog deleteDialog = deleteBuilder.create();
+                deleteDialog.show();
+
+                break;
+
+            case R.id.settings:
+                return false;
+        }
+        return true;
     }
 
 }

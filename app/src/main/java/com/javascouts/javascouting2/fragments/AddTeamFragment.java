@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -48,11 +50,16 @@ public class AddTeamFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public void onDetach() {
-        super.onDetach();
 
         Log.d("USER", "AddTeam Fragment: Detached");
-
+        super.onDetach();
     }
 
 
@@ -184,7 +191,14 @@ public class AddTeamFragment extends Fragment {
 
             }
         }).start();
+    }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        menu.findItem(R.id.cleanseMatches).setVisible(false);
+        menu.findItem(R.id.cleanseTeams).setVisible(false);
+        menu.findItem(R.id.settings).setVisible(false);
+        super.onCreateOptionsMenu(menu,menuInflater);
     }
 
 }
