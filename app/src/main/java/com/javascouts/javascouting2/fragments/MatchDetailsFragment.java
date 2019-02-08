@@ -28,11 +28,13 @@ public class MatchDetailsFragment extends Fragment {
     private int id;
     Team r1, r2, b1, b2;
     Match match;
+    TextView number;
+    TableLayout tl;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_teamdetails, parent, false);
+        return inflater.inflate(R.layout.fragment_matchdetails, parent, false);
 
     }
 
@@ -43,6 +45,7 @@ public class MatchDetailsFragment extends Fragment {
             id = getArguments().getInt("ID");
             Log.d("ID",Integer.valueOf(id).toString());
         }
+
     }
 
     @Override
@@ -66,8 +69,8 @@ public class MatchDetailsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        final TextView number = view.findViewById(R.id.matchNum);
-        final TableLayout tl = view.findViewById(R.id.matchTable);
+        number = view.findViewById(R.id.number);
+        tl = view.findViewById(R.id.matchTable);
 
         if (dao != null) {
             new Thread(new Runnable() {
@@ -75,10 +78,10 @@ public class MatchDetailsFragment extends Fragment {
                 public void run() {
                     match = dao.getMatchById(id);
                     Log.d("USER","Match number received: "+String.valueOf(match.matchNumber));
-                    r1 = dao.getTeamById(match.red1);
-                    r2 = dao.getTeamById(match.red2);
-                    b1 = dao.getTeamById(match.blue1);
-                    b2 = dao.getTeamById(match.blue2);
+                    r1 = dao.getTeamByTeamNumber(match.red1);
+                    r2 = dao.getTeamByTeamNumber(match.red2);
+                    b1 = dao.getTeamByTeamNumber(match.blue1);
+                    b2 = dao.getTeamByTeamNumber(match.blue2);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -103,6 +106,7 @@ public class MatchDetailsFragment extends Fragment {
         tempView.setTextSize(22);
         tempView.setBackground(getActivity().getDrawable(R.drawable.line_divider));
         tempView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        temp.addView(tempView,0);
 
         tempView = new TextView(getContext());
         tempView.setText(getInfo(id,r1),0,getInfo(id,r1).length);
@@ -110,6 +114,7 @@ public class MatchDetailsFragment extends Fragment {
         tempView.setBackground(getActivity().getDrawable(R.drawable.line_divider));
         tempView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         tempView.setTextColor(getResources().getColor(R.color.red));
+        temp.addView(tempView,1);
 
         tempView = new TextView(getContext());
         tempView.setText(getInfo(id,r2),0,getInfo(id,r1).length);
@@ -117,6 +122,7 @@ public class MatchDetailsFragment extends Fragment {
         tempView.setBackground(getActivity().getDrawable(R.drawable.line_divider));
         tempView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         tempView.setTextColor(getResources().getColor(R.color.red));
+        temp.addView(tempView,2);
 
         tempView = new TextView(getContext());
         tempView.setText(getInfo(id,b1),0,getInfo(id,r1).length);
@@ -124,6 +130,7 @@ public class MatchDetailsFragment extends Fragment {
         tempView.setBackground(getActivity().getDrawable(R.drawable.line_divider));
         tempView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         tempView.setTextColor(getResources().getColor(R.color.blue));
+        temp.addView(tempView,3);
 
         tempView = new TextView(getContext());
         tempView.setText(getInfo(id,b2),0,getInfo(id,r1).length);
@@ -131,6 +138,7 @@ public class MatchDetailsFragment extends Fragment {
         tempView.setBackground(getActivity().getDrawable(R.drawable.line_divider));
         tempView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         tempView.setTextColor(getResources().getColor(R.color.blue));
+        temp.addView(tempView,4);
 
         return temp;
 
@@ -149,6 +157,7 @@ public class MatchDetailsFragment extends Fragment {
             tl.addView(createRow(r1,r2,b1,b2,"NUM LANDER"),5);
             tl.addView(createRow(r1,r2,b1,b2,"PARK"),6);
             tl.addView(createRow(r1,r2,b1,b2,"LATCH"),7);
+            tl.setStretchAllColumns(true);
 
         } catch(NullPointerException e) {
 
@@ -156,6 +165,7 @@ public class MatchDetailsFragment extends Fragment {
             toast.show();
             FragmentManager fm = getFragmentManager();
             fm.popBackStack();
+            e.printStackTrace();
 
         }
     }
@@ -163,7 +173,7 @@ public class MatchDetailsFragment extends Fragment {
     public char[] getInfo(String id, Team team) {
 
         if(id.equals("NUMBER")) {
-            return team.teamName.toCharArray();
+            return String.valueOf(team.teamNumber).toCharArray();
         }
         if(id.equals("LAND")) {
             if(team.canLand) {

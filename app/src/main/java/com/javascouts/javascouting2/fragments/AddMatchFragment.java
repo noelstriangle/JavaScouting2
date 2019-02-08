@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -149,9 +150,13 @@ public class AddMatchFragment extends Fragment {
         ArrayAdapter<Integer> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, teamNums);
 
         bs1.setAdapter(adapter);
+        bs1.setGravity(Gravity.CENTER);
         bs2.setAdapter(adapter);
+        bs2.setGravity(Gravity.CENTER);
         rs1.setAdapter(adapter);
+        rs1.setGravity(Gravity.CENTER);
         rs2.setAdapter(adapter);
+        rs2.setGravity(Gravity.CENTER);
 
     }
 

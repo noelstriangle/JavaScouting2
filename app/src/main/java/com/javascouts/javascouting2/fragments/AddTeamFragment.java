@@ -155,25 +155,25 @@ public class AddTeamFragment extends Fragment {
                 tempTeam.canEndPark = canEndPark;
 
                 int points = 0;
-                if (canLand) {
+                if (tempTeam.canLand) {
                     points = points + 30;
                 }
-                if (canSample) {
+                if (tempTeam.canSample) {
                     points = points + 25;
                 }
-                if (canClaim) {
+                if (tempTeam.canClaim) {
                     points = points + 15;
                 }
-                if (canPark) {
+                if (tempTeam.canPark) {
                     points = points + 10;
                 }
                 tempTeam.autoPoints = points;
 
                 points = (depot * 2) + (lander * 5);
-                if (canLatch) {
+                if (tempTeam.canLatch) {
                     points = points + 50;
                 }
-                if (canEndPark) {
+                if (tempTeam.canEndPark) {
                     points = points + 25;
                 }
                 tempTeam.telePoints = points;
