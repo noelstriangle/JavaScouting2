@@ -30,7 +30,7 @@ public class TeamAdapter extends ArrayAdapter<Team> {
 
 
     @NonNull
-    @SuppressLint("InflateParams")
+    @SuppressLint({"InflateParams", "SetTextI18n"})
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
@@ -62,11 +62,11 @@ public class TeamAdapter extends ArrayAdapter<Team> {
             }
 
             if (tt2 != null) {
-                tt2.setText(String.valueOf(p.teamNumber));
+                tt2.setText("Team: "+String.valueOf(p.teamNumber));
             }
 
             if (tt3 != null) {
-                tt3.setText(String.valueOf(p.telePoints + p.autoPoints));
+                tt3.setText("Pts: "+String.valueOf(p.telePoints + p.autoPoints));
             }
         }
 

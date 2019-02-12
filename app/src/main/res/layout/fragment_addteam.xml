@@ -183,6 +183,330 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/endParkBox" />
 
+                <TextView
+                    android:id="@+id/textView16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:text="@string/autonomous"
+                    android:textAllCaps="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/number" />
+
+                <CheckBox
+                    android:id="@+id/landBox10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="64dp"
+                    android:text="@string/can_they_land"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="@+id/number"
+                    app:layout_constraintTop_toBottomOf="@+id/number" />
+
+                <CheckBox
+                    android:id="@+id/sampleBox10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/can_they_sample"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="@+id/number"
+                    app:layout_constraintTop_toBottomOf="@+id/landBox" />
+
+                <CheckBox
+                    android:id="@+id/claimBox10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/can_they_claim"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="@+id/sampleBox"
+                    app:layout_constraintTop_toBottomOf="@+id/sampleBox" />
+
+                <CheckBox
+                    android:id="@+id/parkBox10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/can_they_park"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="@+id/claimBox"
+                    app:layout_constraintTop_toBottomOf="@+id/claimBox" />
+
+                <TextView
+                    android:id="@+id/textView15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:text="@string/autonomous"
+                    android:textAllCaps="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/number" />
+
+                <CheckBox
+                    android:id="@+id/landBox9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="64dp"
+                    android:text="@string/can_they_land"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="@+id/number"
+                    app:layout_constraintTop_toBottomOf="@+id/number" />
+
+                <CheckBox
+                    android:id="@+id/sampleBox9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/can_they_sample"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="@+id/number"
+                    app:layout_constraintTop_toBottomOf="@+id/landBox" />
+
+                <CheckBox
+                    android:id="@+id/claimBox9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/can_they_claim"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="@+id/sampleBox"
+                    app:layout_constraintTop_toBottomOf="@+id/sampleBox" />
+
+                <CheckBox
+                    android:id="@+id/parkBox9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/can_they_park"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="@+id/claimBox"
+                    app:layout_constraintTop_toBottomOf="@+id/claimBox" />
+
+                <TextView
+                    android:id="@+id/textView14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:text="@string/autonomous"
+                    android:textAllCaps="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/number" />
+
+                <CheckBox
+                    android:id="@+id/landBox8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="64dp"
+                    android:text="@string/can_they_land"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="@+id/number"
+                    app:layout_constraintTop_toBottomOf="@+id/number" />
+
+                <CheckBox
+                    android:id="@+id/sampleBox8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/can_they_sample"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="@+id/number"
+                    app:layout_constraintTop_toBottomOf="@+id/landBox" />
+
+                <CheckBox
+                    android:id="@+id/claimBox8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/can_they_claim"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="@+id/sampleBox"
+                    app:layout_constraintTop_toBottomOf="@+id/sampleBox" />
+
+                <CheckBox
+                    android:id="@+id/parkBox8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/can_they_park"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="@+id/claimBox"
+                    app:layout_constraintTop_toBottomOf="@+id/claimBox" />
+
+                <TextView
+                    android:id="@+id/textView13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:text="@string/autonomous"
+                    android:textAllCaps="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/number" />
+
+                <CheckBox
+                    android:id="@+id/landBox7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="64dp"
+                    android:text="@string/can_they_land"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="@+id/number"
+                    app:layout_constraintTop_toBottomOf="@+id/number" />
+
+                <CheckBox
+                    android:id="@+id/sampleBox7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/can_they_sample"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="@+id/number"
+                    app:layout_constraintTop_toBottomOf="@+id/landBox" />
+
+                <CheckBox
+                    android:id="@+id/claimBox7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/can_they_claim"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="@+id/sampleBox"
+                    app:layout_constraintTop_toBottomOf="@+id/sampleBox" />
+
+                <CheckBox
+                    android:id="@+id/parkBox7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/can_they_park"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="@+id/claimBox"
+                    app:layout_constraintTop_toBottomOf="@+id/claimBox" />
+
+                <TextView
+                    android:id="@+id/textView12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:text="@string/autonomous"
+                    android:textAllCaps="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/number" />
+
+                <CheckBox
+                    android:id="@+id/landBox6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="64dp"
+                    android:text="@string/can_they_land"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="@+id/number"
+                    app:layout_constraintTop_toBottomOf="@+id/number" />
+
+                <CheckBox
+                    android:id="@+id/sampleBox6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/can_they_sample"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="@+id/number"
+                    app:layout_constraintTop_toBottomOf="@+id/landBox" />
+
+                <CheckBox
+                    android:id="@+id/claimBox6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/can_they_claim"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="@+id/sampleBox"
+                    app:layout_constraintTop_toBottomOf="@+id/sampleBox" />
+
+                <CheckBox
+                    android:id="@+id/parkBox6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/can_they_park"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="@+id/claimBox"
+                    app:layout_constraintTop_toBottomOf="@+id/claimBox" />
+
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:text="@string/autonomous"
+                    android:textAllCaps="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/number" />
+
+                <CheckBox
+                    android:id="@+id/landBox5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="64dp"
+                    android:text="@string/can_they_land"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="@+id/number"
+                    app:layout_constraintTop_toBottomOf="@+id/number" />
+
+                <CheckBox
+                    android:id="@+id/sampleBox5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/can_they_sample"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="@+id/number"
+                    app:layout_constraintTop_toBottomOf="@+id/landBox" />
+
+                <CheckBox
+                    android:id="@+id/claimBox5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/can_they_claim"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="@+id/sampleBox"
+                    app:layout_constraintTop_toBottomOf="@+id/sampleBox" />
+
+                <CheckBox
+                    android:id="@+id/parkBox5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/can_they_park"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="@+id/claimBox"
+                    app:layout_constraintTop_toBottomOf="@+id/claimBox" />
+
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
 

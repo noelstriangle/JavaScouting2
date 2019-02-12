@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements ActivityFragmentC
 
         if (bar != null) {
             bar.setTitle(R.string.title);
+            bar.setDisplayHomeAsUpEnabled(true);
+            bar.setHomeButtonEnabled(true);
         }
 
         BottomNavigationView navigation = findViewById(R.id.navigation);

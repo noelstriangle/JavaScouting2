@@ -82,7 +82,7 @@ public class MatchesFragment extends Fragment {
         list = view.findViewById(R.id.matchesList);
         refreshList(getContext(), list);
 
-        FloatingActionButton button = view.findViewById(R.id.matchesAdd);
+        com.robertlevonyan.views.customfloatingactionbutton.FloatingActionButton button = view.findViewById(R.id.matchesAdd);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

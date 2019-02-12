@@ -80,7 +80,7 @@ public class ScoutingFragment extends Fragment {
         list = view.findViewById(R.id.scoutingList);
         refreshList(getContext(), list);
 
-        FloatingActionButton button = view.findViewById(R.id.scoutingAdd);
+        com.robertlevonyan.views.customfloatingactionbutton.FloatingActionButton button = view.findViewById(R.id.scoutingAdd);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

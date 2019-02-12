@@ -117,7 +117,7 @@ public class MatchDetailsFragment extends Fragment {
         temp.addView(tempView,1);
 
         tempView = new TextView(getContext());
-        tempView.setText(getInfo(id,r2),0,getInfo(id,r1).length);
+        tempView.setText(getInfo(id,r2),0,getInfo(id,r2).length);
         tempView.setTextSize(22);
         tempView.setBackground(getActivity().getDrawable(R.drawable.line_divider));
         tempView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
@@ -125,7 +125,7 @@ public class MatchDetailsFragment extends Fragment {
         temp.addView(tempView,2);
 
         tempView = new TextView(getContext());
-        tempView.setText(getInfo(id,b1),0,getInfo(id,r1).length);
+        tempView.setText(getInfo(id,b1),0,getInfo(id,b1).length);
         tempView.setTextSize(22);
         tempView.setBackground(getActivity().getDrawable(R.drawable.line_divider));
         tempView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
@@ -133,7 +133,7 @@ public class MatchDetailsFragment extends Fragment {
         temp.addView(tempView,3);
 
         tempView = new TextView(getContext());
-        tempView.setText(getInfo(id,b2),0,getInfo(id,r1).length);
+        tempView.setText(getInfo(id,b2),0,getInfo(id,b2).length);
         tempView.setTextSize(22);
         tempView.setBackground(getActivity().getDrawable(R.drawable.line_divider));
         tempView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);

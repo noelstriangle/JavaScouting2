@@ -56,6 +56,13 @@ public class AddTeamFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().findViewById(R.id.navigation).setVisibility(View.GONE);
+
+    }
+
+    @Override
     public void onDetach() {
 
         Log.d("USER", "AddTeam Fragment: Detached");
@@ -85,10 +92,6 @@ public class AddTeamFragment extends Fragment {
             }
         });
 
-        getActivity().findViewById(R.id.navigation).setVisibility(View.GONE);
-        if (getActivity().getActionBar() != null) {
-            getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-        }
         numT = view.findViewById(R.id.number);
         nameT = view.findViewById(R.id.name);
         depotT = view.findViewById(R.id.numDepot);
@@ -153,6 +156,9 @@ public class AddTeamFragment extends Fragment {
                 tempTeam.canPark = canPark;
                 tempTeam.canLatch = canLatch;
                 tempTeam.canEndPark = canEndPark;
+
+                tempTeam.depotMinerals = depot;
+                tempTeam.landerMinerals = lander;
 
                 int points = 0;
                 if (tempTeam.canLand) {
