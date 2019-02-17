@@ -3,12 +3,14 @@ package com.javascouts.javascouting2.fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -37,7 +39,7 @@ public class ScoutingFragment extends Fragment {
     ListView list;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_scouting, parent, false);
     }
 
@@ -71,7 +73,7 @@ public class ScoutingFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         addTeamFragment = new AddTeamFragment();
@@ -87,7 +89,10 @@ public class ScoutingFragment extends Fragment {
 
                 callback.setCurrent("ADD_TEAM");
                 FragmentManager fm = getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
+                FragmentTransaction ft = null;
+                if (fm != null) {
+                    ft = fm.beginTransaction();
+                }
                 ft.replace(R.id.fragHolder, addTeamFragment);
                 ft.addToBackStack("add");
                 ft.commit();
@@ -133,7 +138,10 @@ public class ScoutingFragment extends Fragment {
                                     @Override
                                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                                         FragmentManager fm = getFragmentManager();
-                                        FragmentTransaction ft = fm.beginTransaction();
+                                        FragmentTransaction ft = null;
+                                        if (fm != null) {
+                                            ft = fm.beginTransaction();
+                                        }
                                         Bundle b = new Bundle();
                                         b.putInt("ID",teams.get(i).id);
                                         teamDetailsFragment.setArguments(b);

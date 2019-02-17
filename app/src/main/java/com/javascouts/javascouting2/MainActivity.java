@@ -10,7 +10,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.javascouts.javascouting2.adapters.ActivityFragmentCommunication;
 import com.javascouts.javascouting2.fragments.MatchesFragment;
 import com.javascouts.javascouting2.fragments.ScoutingFragment;
@@ -58,8 +57,8 @@ public class MainActivity extends AppCompatActivity implements ActivityFragmentC
 
         if (bar != null) {
             bar.setTitle(R.string.title);
-            bar.setDisplayHomeAsUpEnabled(true);
-            bar.setHomeButtonEnabled(true);
+            //bar.setDisplayHomeAsUpEnabled(true);
+            //bar.setHomeButtonEnabled(true);
         }
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
@@ -108,7 +107,13 @@ public class MainActivity extends AppCompatActivity implements ActivityFragmentC
                     current = "SCHEDULE";
                     return true;
                 case R.id.navigation_analysis:
-
+                    if(current.equals("ANALYSIS")){
+                        return true;
+                    }
+                    FragmentTransaction transaction3 = getSupportFragmentManager().beginTransaction();
+                    transaction3.replace(R.id.fragHolder, matchesFragment);
+                    transaction3.commit();
+                    current = "ANALYSIS";
                     return true;
             }
             return false;
