@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,8 +16,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.javascouts.javascouting2.adapters.ActivityFragmentCommunication;
 import com.javascouts.javascouting2.R;
+import com.javascouts.javascouting2.adapters.ActivityFragmentCommunication;
 import com.javascouts.javascouting2.room.Team;
 import com.javascouts.javascouting2.room.UserDao;
 
@@ -178,13 +177,16 @@ public class AddTeamFragment extends Fragment {
                 tempTeam.autoPoints = points;
 
                 points = (depot * 2) + (lander * 5);
+                tempTeam.telePoints = points;
+
+                points = 0;
                 if (tempTeam.canLatch) {
                     points = points + 50;
                 }
                 if (tempTeam.canEndPark) {
                     points = points + 25;
                 }
-                tempTeam.telePoints = points;
+                tempTeam.endPoints = points;
 
                 dao.insertTeams(tempTeam);
                 Log.d("USER", "Team added: " + name);

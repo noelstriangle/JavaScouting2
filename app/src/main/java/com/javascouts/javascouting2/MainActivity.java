@@ -10,16 +10,18 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import com.javascouts.javascouting2.adapters.ActivityFragmentCommunication;
+import com.javascouts.javascouting2.fragments.AnalysisFragment;
 import com.javascouts.javascouting2.fragments.MatchesFragment;
 import com.javascouts.javascouting2.fragments.ScoutingFragment;
-import com.javascouts.javascouting2.room.UserDao;
 import com.javascouts.javascouting2.room.TeamDatabase;
+import com.javascouts.javascouting2.room.UserDao;
 
 public class MainActivity extends AppCompatActivity implements ActivityFragmentCommunication {
 
     private String current;
-    Fragment scoutingFragment, matchesFragment;
+    Fragment scoutingFragment, matchesFragment, analysisFragment;
     private UserDao dao;
     private TeamDatabase db;
     ActionBar bar;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements ActivityFragmentC
                     public void run() {
                         scoutingFragment = new ScoutingFragment();
                         matchesFragment = new MatchesFragment();
+                        analysisFragment = new AnalysisFragment();
 
                         FragmentManager fragmentManager = getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -111,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements ActivityFragmentC
                         return true;
                     }
                     FragmentTransaction transaction3 = getSupportFragmentManager().beginTransaction();
-                    transaction3.replace(R.id.fragHolder, matchesFragment);
+                    transaction3.replace(R.id.fragHolder, analysisFragment);
                     transaction3.commit();
                     current = "ANALYSIS";
                     return true;

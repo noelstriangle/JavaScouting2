@@ -10,19 +10,19 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.javascouts.javascouting2.R;
-import com.javascouts.javascouting2.room.Team;
+import com.javascouts.javascouting2.room.Ana;
 
 import java.util.List;
 
-public class TeamAdapter extends ArrayAdapter<Team> {
+public class AnalysisAdapter extends ArrayAdapter<Ana> {
 
-    public TeamAdapter(Context context, int textViewResourceId) {
+    public AnalysisAdapter(Context context, int textViewResourceId) {
 
         super(context, textViewResourceId);
 
     }
 
-    public TeamAdapter(Context context, int resource, List<Team> items) {
+    public AnalysisAdapter(Context context, int resource, List<Ana> items) {
 
         super(context, resource, items);
 
@@ -40,34 +40,30 @@ public class TeamAdapter extends ArrayAdapter<Team> {
 
             LayoutInflater vi;
             vi = LayoutInflater.from(getContext());
-            v = vi.inflate(R.layout.content_teamrow, null);
+            v = vi.inflate(R.layout.content_analrow, null);
 
         }
 
-        Team p = getItem(position);
+        Ana p = getItem(position);
 
         if (p != null) {
-            TextView tt1 = v.findViewById(R.id.titleText);
-            TextView tt2 = v.findViewById(R.id.subTitleText);
-            TextView tt3 = v.findViewById(R.id.pointsText);
+            TextView tt1 = v.findViewById(R.id.titleTexta);
+            //TextView tt2 = v.findViewById(R.id.subTitleText);
+            TextView tt3 = v.findViewById(R.id.numTexta);
 
             /*v.setBackgroundColor(Color.rgb(37, 130, 41));
             tt1.setTextColor(Color.rgb(255, 202, 43));
             tt2.setTextColor(Color.rgb(255,202,43));
             tt3.setTextColor(Color.rgb(255,202,43));*/
 
-
             if (tt1 != null) {
-                tt1.setText(p.teamName);
-            }
-
-            if (tt2 != null) {
-                tt2.setText("Team: "+String.valueOf(p.teamNumber));
+                tt1.setText("Score: " + String.valueOf(Math.round(p.expectedPerformance * 100.0) / 100.0));
             }
 
             if (tt3 != null) {
-                tt3.setText("Pts: " + String.valueOf(p.telePoints + p.autoPoints + p.endPoints));
+                tt3.setText("Team: " + String.valueOf(p.teamNum));
             }
+
         }
 
         return v;

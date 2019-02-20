@@ -49,4 +49,10 @@ public class Team {
     @ColumnInfo(name = "tele_points")
     public int telePoints;
 
+    @ColumnInfo(name = "end_points")
+    public int endPoints;
+
+    @ColumnInfo(name = "std")
+    public int standardDeviation;
+
 }

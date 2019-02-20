@@ -16,6 +16,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    aaptOptions {
+        noCompress "tflite"
+        noCompress "lite"
+    }
 }
 
 dependencies {
@@ -32,5 +36,7 @@ dependencies {
     def room_version = "1.1.1"
     implementation "android.arch.persistence.room:runtime:$room_version"
     annotationProcessor "android.arch.persistence.room:compiler:$room_version"
+    //noinspection GradleDynamicVersion
+    implementation "org.tensorflow:tensorflow-lite:+"
 
 }

@@ -4,13 +4,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,10 +19,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.javascouts.javascouting2.adapters.ActivityFragmentCommunication;
 import com.javascouts.javascouting2.R;
-import com.javascouts.javascouting2.room.Team;
+import com.javascouts.javascouting2.adapters.ActivityFragmentCommunication;
 import com.javascouts.javascouting2.adapters.TeamAdapter;
+import com.javascouts.javascouting2.room.Team;
 import com.javascouts.javascouting2.room.UserDao;
 
 import java.util.List;
@@ -63,13 +61,6 @@ public class ScoutingFragment extends Fragment {
         }
         Log.d("USER", "Scouting fragment: attached.");
 
-    }
-
-    @Override
-    public void onDetach() {
-
-        Log.d("USER", "Scouting fragment: detached.");
-        super.onDetach();
     }
 
     @Override

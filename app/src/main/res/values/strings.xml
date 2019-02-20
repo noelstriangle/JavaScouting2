@@ -43,4 +43,7 @@
     <string name="blue_team_1">Blue Team 1</string>
     <string name="blue_team_2">Blue Team 2</string>
     <string name="add_1_pleasae">Please add at least 4 teams.</string>
+    <string name="done_adding_data_begin_analysis">Done adding Data? Begin Analysis</string>
+    <string name="add_some_teams">Please add some teams!</string>
+    <string name="ff">API level is not high enough to sort!</string>
 </resources>

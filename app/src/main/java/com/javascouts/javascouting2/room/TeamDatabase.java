@@ -5,7 +5,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-@Database(entities = {Team.class, Match.class}, version = 3, exportSchema = false)
+@Database(entities = {Team.class, Match.class}, version = 4, exportSchema = false)
 public abstract class TeamDatabase extends RoomDatabase {
     private static TeamDatabase INSTANCE;
 

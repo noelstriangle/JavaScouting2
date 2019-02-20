@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -24,9 +23,7 @@ import android.widget.Toast;
 import com.javascouts.javascouting2.R;
 import com.javascouts.javascouting2.adapters.ActivityFragmentCommunication;
 import com.javascouts.javascouting2.adapters.MatchAdapter;
-import com.javascouts.javascouting2.adapters.TeamAdapter;
 import com.javascouts.javascouting2.room.Match;
-import com.javascouts.javascouting2.room.Team;
 import com.javascouts.javascouting2.room.UserDao;
 
 import java.util.List;
@@ -61,16 +58,8 @@ public class MatchesFragment extends Fragment {
                     + " must implement ActivityFragmentCommuncation");
         }
 
-        Log.d("USER", "Scouting fragment: attached.");
+        Log.d("USER", "Matches fragment: attached.");
         super.onAttach(context);
-
-    }
-
-    @Override
-    public void onDetach() {
-
-        Log.d("USER", "Scouting fragment: detached.");
-        super.onDetach();
 
     }
 
