@@ -9,6 +9,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -99,6 +101,7 @@ public class AnalysisFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        setHasOptionsMenu(true);
 
     }
 
@@ -159,6 +162,14 @@ public class AnalysisFragment extends Fragment {
         long declaredLength = fileDescriptor.getDeclaredLength();
         return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        menu.findItem(R.id.cleanseMatches).setVisible(false);
+        menu.findItem(R.id.cleanseTeams).setVisible(false);
+        menu.findItem(R.id.settings).setVisible(false);
+        super.onCreateOptionsMenu(menu, menuInflater);
     }
 
 }

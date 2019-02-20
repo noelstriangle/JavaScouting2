@@ -3,13 +3,16 @@ package com.javascouts.javascouting2.fragments;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -21,6 +24,10 @@ import com.javascouts.javascouting2.room.Match;
 import com.javascouts.javascouting2.room.Team;
 import com.javascouts.javascouting2.room.UserDao;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class MatchDetailsFragment extends Fragment {
 
     ActivityFragmentCommunication callback;
@@ -30,6 +37,8 @@ public class MatchDetailsFragment extends Fragment {
     Match match;
     TextView number;
     TableLayout tl;
+    EditText ra, rt, re, ba, bt, be;
+    Button save;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -44,6 +53,105 @@ public class MatchDetailsFragment extends Fragment {
         if (getArguments() != null) {
             id = getArguments().getInt("ID");
             Log.d("ID",Integer.valueOf(id).toString());
+        }
+        setHasOptionsMenu(true);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (dao != null) {
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    match = dao.getMatchById(id);
+                    Log.d("USER","Match number received: "+String.valueOf(match.matchNumber));
+                    r1 = dao.getTeamByTeamNumber(match.red1);
+                    r2 = dao.getTeamByTeamNumber(match.red2);
+                    b1 = dao.getTeamByTeamNumber(match.blue1);
+                    b2 = dao.getTeamByTeamNumber(match.blue2);
+                    final List<Integer> r = match.results;
+                    if (r.size() != 0) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ra.setText(String.valueOf(r.get(0)));
+                                rt.setText(String.valueOf(r.get(1)));
+                                re.setText(String.valueOf(r.get(2)));
+                                ba.setText(String.valueOf(r.get(3)));
+                                bt.setText(String.valueOf(r.get(4)));
+                                be.setText(String.valueOf(r.get(5)));
+                            }
+                        });
+                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            number.setText(String.valueOf(match.matchNumber));
+                            populateTable(tl, r1, r2, b1, b2);
+                        }
+                    });
+
+                    save.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            final Integer[] t0 = new Integer[6];
+
+                            try {
+                                t0[0] = Integer.valueOf(ra.getText().toString());
+                                t0[1] = Integer.valueOf(rt.getText().toString());
+                                t0[2] = Integer.valueOf(re.getText().toString());
+                                t0[3] = Integer.valueOf(ba.getText().toString());
+                                t0[4] = Integer.valueOf(bt.getText().toString());
+                                t0[5] = Integer.valueOf(be.getText().toString());
+                                if (!match.updated) {
+                                    r1.autoPoints = (r1.autoPoints + t0[0]) / 2;
+                                    r1.telePoints = (r1.telePoints + t0[1]) / 2;
+                                    r1.endPoints = (r1.endPoints + t0[2]) / 2;
+                                    r2.autoPoints = (r2.autoPoints + t0[0]) / 2;
+                                    r2.telePoints = (r2.telePoints + t0[1]) / 2;
+                                    r2.endPoints = (r2.endPoints + t0[2]) / 2;
+                                    b1.autoPoints = (b1.autoPoints + t0[3]) / 2;
+                                    b1.telePoints = (b1.telePoints + t0[4]) / 2;
+                                    b1.endPoints = (b1.endPoints + t0[5]) / 2;
+                                    b2.autoPoints = (b2.autoPoints + t0[3]) / 2;
+                                    b2.telePoints = (b2.telePoints + t0[4]) / 2;
+                                    b2.endPoints = (b2.endPoints + t0[5]) / 2;
+                                    match.updated = true;
+                                }
+
+                            } catch (NumberFormatException e) {
+
+                                Toast.makeText(getContext(), "Please fill in all fields.", Toast.LENGTH_SHORT).show();
+                                return;
+
+                            }
+                            final List<Integer> t = new ArrayList<>(Arrays.asList(t0));
+
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    match.results = t;
+                                    dao.updateMatch(match);
+                                    dao.updateTeams(r1, r2, b1, b2);
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            getFragmentManager().popBackStack();
+                                        }
+                                    });
+                                }
+                            }).start();
+                        }
+                    });
+
+                }
+            }).start();
+        } else {
+            Log.d("USER","DAO is null.");
         }
 
     }
@@ -71,31 +179,17 @@ public class MatchDetailsFragment extends Fragment {
 
         number = view.findViewById(R.id.number);
         tl = view.findViewById(R.id.matchTable);
-
-        if (dao != null) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    match = dao.getMatchById(id);
-                    Log.d("USER","Match number received: "+String.valueOf(match.matchNumber));
-                    r1 = dao.getTeamByTeamNumber(match.red1);
-                    r2 = dao.getTeamByTeamNumber(match.red2);
-                    b1 = dao.getTeamByTeamNumber(match.blue1);
-                    b2 = dao.getTeamByTeamNumber(match.blue2);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                                number.setText(String.valueOf(match.matchNumber));
-                                populateTable(tl,r1,r2,b1,b2);
-                        }
-                    });
-                }
-            }).start();
-        } else {
-            Log.d("USER","DAO is null.");
-        }
+        save = view.findViewById(R.id.save);
+        ra = view.findViewById(R.id.autoResultr);
+        ba = view.findViewById(R.id.autoResultb);
+        rt = view.findViewById(R.id.teleResultr);
+        bt = view.findViewById(R.id.teleResultb);
+        re = view.findViewById(R.id.endResultr);
+        be = view.findViewById(R.id.endResultb);
 
     }
+
+
 
     private TableRow createRow(Team r1, Team r2, Team b1, Team b2, String id) {
 
@@ -186,17 +280,6 @@ public class MatchDetailsFragment extends Fragment {
                 return temp;
             }
         }
-        if(id.equals("LAND")) {
-            if(team.canLand) {
-                char[] temp = new char[1];
-                temp[0] = '\u2713';
-                return temp;
-            } else {
-                char[] temp = new char[1];
-                temp[0] = '\u2717';
-                return temp;
-            }
-        }
         if(id.equals("SAMPLE")) {
             if(team.canSample) {
                 char[] temp = new char[1];
@@ -248,6 +331,14 @@ public class MatchDetailsFragment extends Fragment {
             }
         }
         return new char[]{'P'};
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        menu.findItem(R.id.cleanseMatches).setVisible(false);
+        menu.findItem(R.id.cleanseTeams).setVisible(false);
+        menu.findItem(R.id.settings).setVisible(false);
+        super.onCreateOptionsMenu(menu, menuInflater);
     }
 
 }

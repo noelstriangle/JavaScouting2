@@ -70,7 +70,6 @@ public class MatchesFragment extends Fragment {
         matchDetailsFragment = new MatchDetailsFragment();
 
         list = view.findViewById(R.id.matchesList);
-        refreshList(getContext(), list);
 
         com.robertlevonyan.views.customfloatingactionbutton.FloatingActionButton button = view.findViewById(R.id.matchesAdd);
         button.setOnClickListener(new View.OnClickListener() {
@@ -197,12 +196,6 @@ public class MatchesFragment extends Fragment {
 
                                 }
 
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        getActivity().recreate();
-                                    }
-                                });
                             }
                         }).start();
 

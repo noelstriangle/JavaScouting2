@@ -3,9 +3,11 @@ package com.javascouts.javascouting2.room;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
-@Database(entities = {Team.class, Match.class}, version = 4, exportSchema = false)
+@Database(entities = {Team.class, Match.class}, version = 6, exportSchema = false)
+@TypeConverters({ScoresTypeConverter.class})
 public abstract class TeamDatabase extends RoomDatabase {
     private static TeamDatabase INSTANCE;
 

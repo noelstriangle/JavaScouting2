@@ -62,11 +62,11 @@ public class TeamAdapter extends ArrayAdapter<Team> {
             }
 
             if (tt2 != null) {
-                tt2.setText("Team: "+String.valueOf(p.teamNumber));
+                tt2.setText("Team " + String.valueOf(p.teamNumber));
             }
 
             if (tt3 != null) {
-                tt3.setText("Pts: " + String.valueOf(p.telePoints + p.autoPoints + p.endPoints));
+                tt3.setText("Points: " + String.valueOf(p.telePoints + p.autoPoints + p.endPoints));
             }
         }
 

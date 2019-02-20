@@ -11,7 +11,6 @@
     <string name="can_they_sample">Can they sample?</string>
     <string name="can_they_claim">Can they claim?</string>
     <string name="can_they_park">Can they park?</string>
-    <string name="autonomous">Autonomous</string>
     <string name="tele_op">Tele-Op</string>
     <string name="minerals_in_depot">Minerals in Depot</string>
     <string name="minerals_in_lander">Minerals in Lander</string>
@@ -43,7 +42,14 @@
     <string name="blue_team_1">Blue Team 1</string>
     <string name="blue_team_2">Blue Team 2</string>
     <string name="add_1_pleasae">Please add at least 4 teams.</string>
-    <string name="done_adding_data_begin_analysis">Done adding Data? Begin Analysis</string>
+    <string name="done_adding_data_begin_analysis">Perform analysis?</string>
     <string name="add_some_teams">Please add some teams!</string>
     <string name="ff">API level is not high enough to sort!</string>
+    <string name="scouted_data">Scouted Data</string>
+    <string name="scouting_data">Scouting Data</string>
+    <string name="save">Save</string>
+    <string name="blue_scores">Blue Scores</string>
+    <string name="autonomous">Autonomous</string>
+    <string name="red_scores">Red Scores</string>
+    <string name="results">Results</string>
 </resources>

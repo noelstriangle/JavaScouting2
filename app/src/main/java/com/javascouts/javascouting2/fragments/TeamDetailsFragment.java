@@ -7,9 +7,10 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -40,6 +41,7 @@ public class TeamDetailsFragment extends Fragment {
             id = getArguments().getInt("ID");
             Log.d("ID",Integer.valueOf(id).toString());
         }
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -216,6 +218,14 @@ public class TeamDetailsFragment extends Fragment {
         } else {
             return getString(R.string.no);
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        menu.findItem(R.id.cleanseMatches).setVisible(false);
+        menu.findItem(R.id.cleanseTeams).setVisible(false);
+        menu.findItem(R.id.settings).setVisible(false);
+        super.onCreateOptionsMenu(menu, menuInflater);
     }
 
 }

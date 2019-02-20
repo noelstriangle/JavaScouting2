@@ -71,7 +71,6 @@ public class ScoutingFragment extends Fragment {
         teamDetailsFragment = new TeamDetailsFragment();
 
         list = view.findViewById(R.id.scoutingList);
-        refreshList(getContext(), list);
 
         com.robertlevonyan.views.customfloatingactionbutton.FloatingActionButton button = view.findViewById(R.id.scoutingAdd);
         button.setOnClickListener(new View.OnClickListener() {

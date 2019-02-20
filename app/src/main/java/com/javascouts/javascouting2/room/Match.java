@@ -5,6 +5,8 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.util.List;
+
 @Entity(tableName = "matches")
 public class Match {
 
@@ -25,5 +27,11 @@ public class Match {
 
     @ColumnInfo(name = "red2")
     public int red2;
+
+    @ColumnInfo(name = "results")
+    public List<Integer> results;
+
+    @ColumnInfo(name = "teamsUpdated")
+    public boolean updated;
 
 }
