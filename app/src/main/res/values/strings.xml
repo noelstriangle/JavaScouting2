@@ -26,6 +26,8 @@
     <string name="do_delete">Deleting all the teams will delete all the teams. Maybe export before you do this? Proceed?</string>
     <string name="do_delete2">Deleting all the matches will, indeed, delete all the teams. Maybe export before you do this? Proceed?</string>
     <string name="delete_header">Delete Teams</string>
+    <string name="delete_header2">Delete Team</string>
+    <string name="delete_header3">Delete Match</string>
     <string name="delete_matches">Delete Matches</string>
     <string name="no">No</string>
     <string name="question_land">Can land?</string>
@@ -52,4 +54,10 @@
     <string name="autonomous">Autonomous</string>
     <string name="red_scores">Red Scores</string>
     <string name="results">Results</string>
+    <string name="delete_team">Delete Team</string>
+    <string name="delete_match">Delete Match</string>
+    <string name="do_delete23">The team will be lost permanently if you delete it. Continue?</string>
+    <string name="do_delete34">The match will be lost permanently if you delete it. Continue?</string>
+    <string name="export_teams">Export Teams</string>
+    <string name="export_matches">Export Matches</string>
 </resources>

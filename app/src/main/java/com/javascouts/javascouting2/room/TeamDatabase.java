@@ -6,7 +6,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
-@Database(entities = {Team.class, Match.class}, version = 6, exportSchema = false)
+@Database(entities = {Team.class, Match.class}, version = 7, exportSchema = false)
 @TypeConverters({ScoresTypeConverter.class})
 public abstract class TeamDatabase extends RoomDatabase {
     private static TeamDatabase INSTANCE;

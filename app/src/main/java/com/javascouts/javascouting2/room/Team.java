@@ -10,9 +10,6 @@ public class Team {
     @PrimaryKey(autoGenerate = true)
     public int id;
 
-    @ColumnInfo(name = "color")
-    public int color;
-
     @ColumnInfo(name="team_name")
     public String teamName;
 

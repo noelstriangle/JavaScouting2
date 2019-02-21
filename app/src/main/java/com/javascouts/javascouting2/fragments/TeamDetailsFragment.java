@@ -2,13 +2,16 @@ package com.javascouts.javascouting2.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
@@ -225,7 +228,59 @@ public class TeamDetailsFragment extends Fragment {
         menu.findItem(R.id.cleanseMatches).setVisible(false);
         menu.findItem(R.id.cleanseTeams).setVisible(false);
         menu.findItem(R.id.settings).setVisible(false);
+        menu.findItem(R.id.deleteMatch).setVisible(false);
+        menu.findItem(R.id.export).setVisible(false);
+        menu.findItem(R.id.export2).setVisible(false);
         super.onCreateOptionsMenu(menu, menuInflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.deleteTeam:
+
+                AlertDialog.Builder deleteBuilder = new AlertDialog.Builder(getContext());
+
+                deleteBuilder.setTitle(R.string.delete_header2);
+
+                deleteBuilder.setMessage(R.string.do_delete23);
+
+                deleteBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                dao.deleteTeam(team);
+
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        getFragmentManager().popBackStack();
+                                    }
+                                });
+                            }
+                        }).start();
+
+                    }
+                });
+                deleteBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+                AlertDialog deleteDialog = deleteBuilder.create();
+                deleteDialog.show();
+
+                break;
+
+        }
+
+        return true;
+
     }
 
 }

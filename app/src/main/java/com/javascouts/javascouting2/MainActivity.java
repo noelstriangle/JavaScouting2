@@ -136,6 +136,10 @@ public class MainActivity extends AppCompatActivity implements ActivityFragmentC
                 return false;
             case R.id.cleanseMatches:
                 return false;
+            case R.id.deleteMatch:
+                return false;
+            case R.id.deleteTeam:
+                return false;
             case R.id.settings:
                 break;
         }

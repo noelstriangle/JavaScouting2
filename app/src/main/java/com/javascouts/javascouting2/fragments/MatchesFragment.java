@@ -2,7 +2,9 @@ package com.javascouts.javascouting2.fragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,8 +26,12 @@ import com.javascouts.javascouting2.R;
 import com.javascouts.javascouting2.adapters.ActivityFragmentCommunication;
 import com.javascouts.javascouting2.adapters.MatchAdapter;
 import com.javascouts.javascouting2.room.Match;
+import com.javascouts.javascouting2.room.TeamDatabase;
 import com.javascouts.javascouting2.room.UserDao;
+import com.opencsv.CSVWriter;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.List;
 
 public class MatchesFragment extends Fragment {
@@ -36,6 +42,7 @@ public class MatchesFragment extends Fragment {
     List<Match> matches;
     private UserDao dao;
     ListView list;
+    private TeamDatabase db;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -57,6 +64,12 @@ public class MatchesFragment extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement ActivityFragmentCommuncation");
         }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                db = TeamDatabase.getTeamDatabase(getContext());
+            }
+        }).start();
 
         Log.d("USER", "Matches fragment: attached.");
         super.onAttach(context);
@@ -144,7 +157,7 @@ public class MatchesFragment extends Fragment {
                             if (matches != null) {
                                 MatchAdapter ma = new MatchAdapter(context, R.layout.content_teamrow, matches);
                                 lv.setAdapter(ma);
-                                lv.setEmptyView(getActivity().findViewById(R.id.imageView));
+                                lv.setEmptyView(getActivity().findViewById(R.id.imageView2));
                                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -170,6 +183,9 @@ public class MatchesFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         menu.findItem(R.id.cleanseTeams).setVisible(false);
+        menu.findItem(R.id.deleteMatch).setVisible(false);
+        menu.findItem(R.id.deleteTeam).setVisible(false);
+        menu.findItem(R.id.export).setVisible(false);
         super.onCreateOptionsMenu(menu,menuInflater);
     }
 
@@ -211,10 +227,42 @@ public class MatchesFragment extends Fragment {
 
                 break;
 
+            case R.id.export2:
+
+                exportToDatabase();
+
             case R.id.settings:
                 return false;
         }
         return true;
+    }
+
+    public boolean exportToDatabase() {
+
+        String FILENAME = "matchDatabase.csv";
+        File directoryDownload = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File logDir = new File(directoryDownload, FILENAME);
+        try {
+            logDir.createNewFile();
+            CSVWriter csvWriter = new CSVWriter(new FileWriter(logDir));
+            Cursor curCSV = db.query("SELECT * FROM matches", null);
+            csvWriter.writeNext(curCSV.getColumnNames());
+            while (curCSV.moveToNext()) {
+                String arrStr[] = {curCSV.getString(1) + " ", curCSV.getString(2) + " ",
+                        curCSV.getString(3) + " ", curCSV.getString(4) + " ",
+                        curCSV.getString(5) + " ", curCSV.getString(6) + " ",
+                        curCSV.getString(7) + " ", curCSV.getString(8) + " "};
+                csvWriter.writeNext(arrStr);
+            }
+            csvWriter.close();
+            curCSV.close();
+            return true;
+        } catch (Exception e) {
+            Log.e("exporting error:", e.getMessage(), e);
+            return false;
+        }
+
+
     }
 
 }

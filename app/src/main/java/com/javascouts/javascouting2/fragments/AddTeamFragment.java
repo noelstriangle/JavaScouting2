@@ -208,6 +208,10 @@ public class AddTeamFragment extends Fragment {
         menu.findItem(R.id.cleanseMatches).setVisible(false);
         menu.findItem(R.id.cleanseTeams).setVisible(false);
         menu.findItem(R.id.settings).setVisible(false);
+        menu.findItem(R.id.deleteMatch).setVisible(false);
+        menu.findItem(R.id.deleteTeam).setVisible(false);
+        menu.findItem(R.id.export).setVisible(false);
+        menu.findItem(R.id.export2).setVisible(false);
         super.onCreateOptionsMenu(menu,menuInflater);
     }
 

@@ -2,7 +2,9 @@ package com.javascouts.javascouting2.fragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -23,8 +25,12 @@ import com.javascouts.javascouting2.R;
 import com.javascouts.javascouting2.adapters.ActivityFragmentCommunication;
 import com.javascouts.javascouting2.adapters.TeamAdapter;
 import com.javascouts.javascouting2.room.Team;
+import com.javascouts.javascouting2.room.TeamDatabase;
 import com.javascouts.javascouting2.room.UserDao;
+import com.opencsv.CSVWriter;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.List;
 
 public class ScoutingFragment extends Fragment {
@@ -35,6 +41,7 @@ public class ScoutingFragment extends Fragment {
     List<Team> teams;
     private UserDao dao;
     ListView list;
+    TeamDatabase db;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -55,6 +62,12 @@ public class ScoutingFragment extends Fragment {
         try {
             callback = (ActivityFragmentCommunication) context;
             dao = callback.getDao();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    db = TeamDatabase.getTeamDatabase(getContext());
+                }
+            }).start();
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement ActivityFragmentCommuncation");
@@ -152,6 +165,9 @@ public class ScoutingFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         menu.findItem(R.id.cleanseMatches).setVisible(false);
+        menu.findItem(R.id.deleteMatch).setVisible(false);
+        menu.findItem(R.id.deleteTeam).setVisible(false);
+        menu.findItem(R.id.export2).setVisible(false);
         super.onCreateOptionsMenu(menu,menuInflater);
     }
 
@@ -197,12 +213,50 @@ public class ScoutingFragment extends Fragment {
                 AlertDialog deleteDialog = deleteBuilder.create();
                 deleteDialog.show();
 
-                break;
+                return true;
+
+            case R.id.export:
+
+                exportToDatabase();
 
             case R.id.settings:
                 return false;
         }
         return true;
     }
+
+
+    public boolean exportToDatabase() {
+
+        String FILENAME = "teamDatabase.csv";
+        File directoryDownload = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File logDir = new File(directoryDownload, FILENAME);
+        try {
+            logDir.createNewFile();
+            CSVWriter csvWriter = new CSVWriter(new FileWriter(logDir));
+            Cursor curCSV = db.query("SELECT * FROM teams", null);
+            csvWriter.writeNext(curCSV.getColumnNames());
+            while (curCSV.moveToNext()) {
+                String arrStr[] = {curCSV.getString(1) + " ", curCSV.getString(2) + " ",
+                        curCSV.getString(3) + " ", curCSV.getString(4) + " ",
+                        curCSV.getString(5) + " ", curCSV.getString(6) + " ",
+                        curCSV.getString(7) + " ", curCSV.getString(8) + " ",
+                        curCSV.getString(9) + " ", curCSV.getString(10) + " ",
+                        curCSV.getString(10) + " ", curCSV.getString(11) + " ",
+                        curCSV.getString(12) + " ", curCSV.getString(13) + " ",
+                        curCSV.getString(14) + " ", curCSV.getString(15) + " "};
+                csvWriter.writeNext(arrStr);
+            }
+            csvWriter.close();
+            curCSV.close();
+            return true;
+        } catch (Exception e) {
+            Log.e("exporting error:", e.getMessage(), e);
+            return false;
+        }
+
+
+    }
+
 
 }

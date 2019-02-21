@@ -2,13 +2,16 @@ package com.javascouts.javascouting2.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -74,7 +77,7 @@ public class MatchDetailsFragment extends Fragment {
                     b1 = dao.getTeamByTeamNumber(match.blue1);
                     b2 = dao.getTeamByTeamNumber(match.blue2);
                     final List<Integer> r = match.results;
-                    if (r.size() != 0) {
+                    if (r.get(0) != null) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -338,7 +341,59 @@ public class MatchDetailsFragment extends Fragment {
         menu.findItem(R.id.cleanseMatches).setVisible(false);
         menu.findItem(R.id.cleanseTeams).setVisible(false);
         menu.findItem(R.id.settings).setVisible(false);
+        menu.findItem(R.id.deleteTeam).setVisible(false);
+        menu.findItem(R.id.export).setVisible(false);
+        menu.findItem(R.id.export2).setVisible(false);
         super.onCreateOptionsMenu(menu, menuInflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.deleteMatch:
+
+                AlertDialog.Builder deleteBuilder = new AlertDialog.Builder(getContext());
+
+                deleteBuilder.setTitle(R.string.delete_header3);
+
+                deleteBuilder.setMessage(R.string.do_delete34);
+
+                deleteBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                dao.deleteMatch(match);
+
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        getFragmentManager().popBackStack();
+                                    }
+                                });
+                            }
+                        }).start();
+
+                    }
+                });
+                deleteBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+                AlertDialog deleteDialog = deleteBuilder.create();
+                deleteDialog.show();
+
+                break;
+
+        }
+
+        return true;
+
     }
 
 }
