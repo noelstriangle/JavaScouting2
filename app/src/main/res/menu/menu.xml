@@ -8,9 +8,6 @@
         android:id="@+id/cleanseMatches"
         android:title="@string/delete_all_matches" />
     <item
-        android:id="@+id/settings"
-        android:title="@string/settings" />
-    <item
         android:id="@+id/deleteTeam"
         android:title="@string/delete_team" />
     <item
@@ -22,5 +19,8 @@
     <item
         android:id="@+id/export2"
         android:title="@string/export_matches" />
+    <item
+        android:id="@+id/settings"
+        android:title="@string/settings" />
 
 </menu>

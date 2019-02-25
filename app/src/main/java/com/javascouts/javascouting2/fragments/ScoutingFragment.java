@@ -1,10 +1,16 @@
 package com.javascouts.javascouting2.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.javascouts.javascouting2.R;
 import com.javascouts.javascouting2.adapters.ActivityFragmentCommunication;
@@ -27,10 +34,16 @@ import com.javascouts.javascouting2.adapters.TeamAdapter;
 import com.javascouts.javascouting2.room.Team;
 import com.javascouts.javascouting2.room.TeamDatabase;
 import com.javascouts.javascouting2.room.UserDao;
+import com.opencsv.CSVParser;
+import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
+import com.opencsv.bean.CsvToBeanBuilder;
 
 import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.InputStream;
 import java.util.List;
 
 public class ScoutingFragment extends Fragment {
@@ -42,6 +55,7 @@ public class ScoutingFragment extends Fragment {
     private UserDao dao;
     ListView list;
     TeamDatabase db;
+    Uri uri;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -173,7 +187,9 @@ public class ScoutingFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d("USER",String.valueOf(item.getTitle()));
         switch (item.getItemId()) {
+
             case R.id.cleanseTeams:
                 AlertDialog.Builder deleteBuilder = new AlertDialog.Builder(getContext());
 
@@ -217,12 +233,54 @@ public class ScoutingFragment extends Fragment {
 
             case R.id.export:
 
-                exportToDatabase();
+                AlertDialog.Builder exportDialog = new AlertDialog.Builder(getContext());
+
+                exportDialog.setTitle(R.string.export_teams);
+
+                exportDialog.setMessage(R.string.do_export);
+
+                exportDialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getContext(), "Exporting...", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                exportToDatabase();
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getContext(),"Done!", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                            }
+                        }).start();
+
+                    }
+                });
+                exportDialog.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+                AlertDialog exporter = exportDialog.create();
+                exporter.show();
+                return true;
 
             case R.id.settings:
                 return false;
+            default:
+                Log.d("USER","Default reached");
+                return super.onOptionsItemSelected(item);
         }
-        return true;
+
     }
 
 
@@ -254,9 +312,64 @@ public class ScoutingFragment extends Fragment {
             Log.e("exporting error:", e.getMessage(), e);
             return false;
         }
+    }
 
+    private boolean importFromDatabase(Uri input) {
+
+        FileDescriptor fileDescriptor = null;
+
+        try {
+
+            ParcelFileDescriptor parcelFileDescriptor =
+                    getActivity().getContentResolver().openFileDescriptor(input, "r");
+            fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+            parcelFileDescriptor.close();
+
+        } catch (Exception e){
+
+            Log.e("USER",e.getMessage(),e);
+            return false;
+
+        }
+
+        List<Team> beans = new CsvToBeanBuilder(new FileReader(fileDescriptor))
+                .withType(Team.class).build().parse();
+
+        return true;
+    }
+
+    private static final int READ_REQUEST_CODE = 42;
+
+    public void doImport() {
+
+        // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file
+        // browser.
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+
+        // Filter to show only images, using the image MIME data type.
+        // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
+        // To search for all documents available via installed storage providers,
+        // it would be "*/*".
+        intent.setType("text/csv");
+
+        startActivityForResult(intent, READ_REQUEST_CODE);
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode,
+                                 Intent resultData) {
+
+        if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            // The document selected by the user won't be returned in the intent.
+            // Instead, a URI to that document will be contained in the return intent
+            // provided to this method as a parameter.
+            // Pull that URI using resultData.getData().
+            uri = null;
+            if (resultData != null) {
+                uri = resultData.getData();
+            }
+        }
+    }
 
 }

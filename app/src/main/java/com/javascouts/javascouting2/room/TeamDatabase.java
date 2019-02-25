@@ -16,7 +16,7 @@ public abstract class TeamDatabase extends RoomDatabase {
     public static TeamDatabase getTeamDatabase(Context context) {
         if (INSTANCE == null) {
             INSTANCE =
-                    Room.databaseBuilder(context.getApplicationContext(), TeamDatabase.class, "team-database")
+                    Room.databaseBuilder(context.getApplicationContext(), TeamDatabase.class, "teamNumber-database")
                             .fallbackToDestructiveMigration()
                             .build();
         }

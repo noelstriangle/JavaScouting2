@@ -136,7 +136,7 @@ public class AddTeamFragment extends Fragment {
 
                 if (teams.contains(dao.getTeamByTeamNumber(num))) {
 
-                    //TODO: add team number already exists message, or make auto-fill for an already completed team
+                    //TODO: add teamNumber number already exists message, or make auto-fill for an already completed teamNumber
                     return;
 
                 }

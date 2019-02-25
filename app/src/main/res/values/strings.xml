@@ -23,8 +23,8 @@
     <string name="delete_all_teams">Delete All Teams</string>
     <string name="delete_all_matches">Delete All Matches</string>
     <string name="settings">Settings</string>
-    <string name="do_delete">Deleting all the teams will delete all the teams. Maybe export before you do this? Proceed?</string>
-    <string name="do_delete2">Deleting all the matches will, indeed, delete all the teams. Maybe export before you do this? Proceed?</string>
+    <string name="do_delete">Deleting all the teams will delete all the teams. Maybe export before you do this? Continue?</string>
+    <string name="do_delete2">Deleting all the matches will, indeed, delete all the teams. Maybe export before you do this? Continue?</string>
     <string name="delete_header">Delete Teams</string>
     <string name="delete_header2">Delete Team</string>
     <string name="delete_header3">Delete Match</string>
@@ -60,4 +60,6 @@
     <string name="do_delete34">The match will be lost permanently if you delete it. Continue?</string>
     <string name="export_teams">Export Teams</string>
     <string name="export_matches">Export Matches</string>
+    <string name="do_export">The resulting csv file will be located in the downloads folder. It can be loaded into a viewer or be sent and imported into the app. Continue?</string>
+
 </resources>

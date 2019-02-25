@@ -229,7 +229,45 @@ public class MatchesFragment extends Fragment {
 
             case R.id.export2:
 
-                exportToDatabase();
+                AlertDialog.Builder exportDialog = new AlertDialog.Builder(getContext());
+
+                exportDialog.setTitle(R.string.export_matches);
+
+                exportDialog.setMessage(R.string.do_export);
+
+                exportDialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getContext(), "Exporting...", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                exportToDatabase();
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getContext(),"Done!", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                            }
+                        }).start();
+
+                    }
+                });
+                exportDialog.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+                AlertDialog exporter= exportDialog.create();
+                exporter.show();
 
             case R.id.settings:
                 return false;
