@@ -5,12 +5,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.ParcelFileDescriptor;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -34,28 +32,29 @@ import com.javascouts.javascouting2.adapters.TeamAdapter;
 import com.javascouts.javascouting2.room.Team;
 import com.javascouts.javascouting2.room.TeamDatabase;
 import com.javascouts.javascouting2.room.UserDao;
-import com.opencsv.CSVParser;
-import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
-import com.opencsv.bean.CsvToBeanBuilder;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 
 import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ScoutingFragment extends Fragment {
 
-    ActivityFragmentCommunication callback;
+    private ActivityFragmentCommunication callback;
     private Fragment addTeamFragment;
     private Fragment teamDetailsFragment;
-    List<Team> teams;
+    private List<Team> teams;
     private UserDao dao;
-    ListView list;
-    TeamDatabase db;
-    Uri uri;
+    private ListView list;
+    private TeamDatabase db;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -150,7 +149,7 @@ public class ScoutingFragment extends Fragment {
                             if (teams != null) {
                                 TeamAdapter ta = new TeamAdapter(context, R.layout.content_teamrow, teams);
                                 lv.setAdapter(ta);
-                                lv.setEmptyView(getActivity().findViewById(R.id.imageView));
+//                                lv.setEmptyView(getActivity().findViewById(R.id.imageView));
                                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -182,12 +181,12 @@ public class ScoutingFragment extends Fragment {
         menu.findItem(R.id.deleteMatch).setVisible(false);
         menu.findItem(R.id.deleteTeam).setVisible(false);
         menu.findItem(R.id.export2).setVisible(false);
+        menu.findItem(R.id.inport2).setVisible(false);
         super.onCreateOptionsMenu(menu,menuInflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d("USER",String.valueOf(item.getTitle()));
         switch (item.getItemId()) {
 
             case R.id.cleanseTeams:
@@ -210,10 +209,10 @@ public class ScoutingFragment extends Fragment {
 
                                 }
 
-                                getActivity().runOnUiThread(new Runnable() {
+                                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        getActivity().recreate();
+                                        Objects.requireNonNull(getActivity()).recreate();
                                     }
                                 });
                             }
@@ -233,7 +232,7 @@ public class ScoutingFragment extends Fragment {
 
             case R.id.export:
 
-                AlertDialog.Builder exportDialog = new AlertDialog.Builder(getContext());
+                AlertDialog.Builder exportDialog = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
 
                 exportDialog.setTitle(R.string.export_teams);
 
@@ -246,19 +245,20 @@ public class ScoutingFragment extends Fragment {
                             @Override
                             public void run() {
 
-                                getActivity().runOnUiThread(new Runnable() {
+                                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         Toast.makeText(getContext(), "Exporting...", Toast.LENGTH_SHORT).show();
                                     }
                                 });
-                                exportToDatabase();
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(getContext(),"Done!", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                                if (exportToDatabase()) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getContext(), "Done!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
 
                             }
                         }).start();
@@ -274,10 +274,14 @@ public class ScoutingFragment extends Fragment {
                 exporter.show();
                 return true;
 
-            case R.id.settings:
-                return false;
+            case R.id.inport:
+
+                doImport();
+
+                return true;
+
             default:
-                Log.d("USER","Default reached");
+
                 return super.onOptionsItemSelected(item);
         }
 
@@ -295,47 +299,82 @@ public class ScoutingFragment extends Fragment {
             Cursor curCSV = db.query("SELECT * FROM teams", null);
             csvWriter.writeNext(curCSV.getColumnNames());
             while (curCSV.moveToNext()) {
-                String arrStr[] = {curCSV.getString(1) + " ", curCSV.getString(2) + " ",
-                        curCSV.getString(3) + " ", curCSV.getString(4) + " ",
-                        curCSV.getString(5) + " ", curCSV.getString(6) + " ",
-                        curCSV.getString(7) + " ", curCSV.getString(8) + " ",
-                        curCSV.getString(9) + " ", curCSV.getString(10) + " ",
+                String arrStr[] = {curCSV.getString(0) + " ", curCSV.getString(1) + " ",
+                        curCSV.getString(2) + " ", curCSV.getString(3) + " ",
+                        curCSV.getString(4) + " ", curCSV.getString(5) + " ",
+                        curCSV.getString(6) + " ", curCSV.getString(7) + " ",
+                        curCSV.getString(8) + " ", curCSV.getString(9) + " ",
                         curCSV.getString(10) + " ", curCSV.getString(11) + " ",
                         curCSV.getString(12) + " ", curCSV.getString(13) + " ",
-                        curCSV.getString(14) + " ", curCSV.getString(15) + " "};
+                        curCSV.getString(14) + " "};
                 csvWriter.writeNext(arrStr);
             }
             csvWriter.close();
             curCSV.close();
             return true;
         } catch (Exception e) {
+            Looper.prepare();
+            Toast.makeText(getContext(), "Exporting failed!", Toast.LENGTH_SHORT).show();
             Log.e("exporting error:", e.getMessage(), e);
             return false;
         }
     }
 
-    private boolean importFromDatabase(Uri input) {
-
-        FileDescriptor fileDescriptor = null;
+    private void importFromDatabase(Uri input) {
 
         try {
 
-            ParcelFileDescriptor parcelFileDescriptor =
-                    getActivity().getContentResolver().openFileDescriptor(input, "r");
-            fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-            parcelFileDescriptor.close();
+            InputStream fileInputStream = Objects.requireNonNull(getContext()).getContentResolver().openInputStream(input);
+            CSVParser parser = CSVParser.parse(Objects.requireNonNull(fileInputStream), Charset.defaultCharset(), CSVFormat.DEFAULT);
+            List<CSVRecord> toAdd = parser.getRecords();
+            final List<Team> toPush = new ArrayList<>();
+            for (int i = 1; i < toAdd.size(); i++) {
+
+                Team t = new Team();
+                CSVRecord curr = toAdd.get(i);
+                t.id = Integer.valueOf(curr.get(0).trim());
+                t.teamName = curr.get(1).trim();
+                t.teamNumber = Integer.valueOf(curr.get(2).trim());
+                t.canLand = Boolean.valueOf(curr.get(3).trim());
+                t.canSample = Boolean.valueOf(curr.get(4).trim());
+                t.canClaim = Boolean.valueOf(curr.get(5).trim());
+                t.canPark = Boolean.valueOf(curr.get(6).trim());
+                t.depotMinerals = Integer.valueOf(curr.get(7).trim());
+                t.landerMinerals = Integer.valueOf(curr.get(8).trim());
+                t.canLatch = Boolean.valueOf(curr.get(9).trim());
+                t.canEndPark = Boolean.valueOf(curr.get(10).trim());
+                t.autoPoints = Integer.valueOf(curr.get(11).trim());
+                t.telePoints = Integer.valueOf(curr.get(12).trim());
+                t.endPoints = Integer.valueOf(curr.get(13).trim());
+                t.standardDeviation = Integer.valueOf(curr.get(14).trim());
+                toPush.add(t);
+
+            }
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (Team t : toPush) {
+
+                        dao.insertTeams(t);
+                        Log.d("USER", "Team pushed: " + String.valueOf(t.teamNumber));
+
+                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getActivity().recreate();
+                        }
+                    });
+                }
+            }).start();
+
 
         } catch (Exception e){
 
             Log.e("USER",e.getMessage(),e);
-            return false;
 
         }
 
-        List<Team> beans = new CsvToBeanBuilder(new FileReader(fileDescriptor))
-                .withType(Team.class).build().parse();
-
-        return true;
     }
 
     private static final int READ_REQUEST_CODE = 42;
@@ -346,11 +385,7 @@ public class ScoutingFragment extends Fragment {
         // browser.
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
 
-        // Filter to show only images, using the image MIME data type.
-        // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
-        // To search for all documents available via installed storage providers,
-        // it would be "*/*".
-        intent.setType("text/csv");
+        intent.setType("text/*");
 
         startActivityForResult(intent, READ_REQUEST_CODE);
 
@@ -365,9 +400,10 @@ public class ScoutingFragment extends Fragment {
             // Instead, a URI to that document will be contained in the return intent
             // provided to this method as a parameter.
             // Pull that URI using resultData.getData().
-            uri = null;
+            Uri uri;
             if (resultData != null) {
                 uri = resultData.getData();
+                importFromDatabase(uri);
             }
         }
     }

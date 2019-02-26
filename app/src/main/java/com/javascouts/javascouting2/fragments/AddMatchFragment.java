@@ -232,6 +232,8 @@ public class AddMatchFragment extends Fragment {
         menu.findItem(R.id.deleteTeam).setVisible(false);
         menu.findItem(R.id.export).setVisible(false);
         menu.findItem(R.id.export2).setVisible(false);
+        menu.findItem(R.id.inport).setVisible(false);
+        menu.findItem(R.id.inport2).setVisible(false);
         super.onCreateOptionsMenu(menu,menuInflater);
     }
 

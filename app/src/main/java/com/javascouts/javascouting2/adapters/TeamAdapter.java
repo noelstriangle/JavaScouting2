@@ -66,7 +66,7 @@ public class TeamAdapter extends ArrayAdapter<Team> {
             }
 
             if (tt3 != null) {
-                tt3.setText("Points: " + String.valueOf(p.telePoints + p.autoPoints + p.endPoints));
+                tt3.setText("Avg Points: " + '\n' + String.valueOf(p.telePoints + p.autoPoints + p.endPoints));
             }
         }
 

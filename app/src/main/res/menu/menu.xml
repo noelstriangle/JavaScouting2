@@ -20,6 +20,12 @@
         android:id="@+id/export2"
         android:title="@string/export_matches" />
     <item
+        android:id="@+id/inport"
+        android:title="@string/import_teams" />
+    <item
+        android:id="@+id/inport2"
+        android:title="@string/import_matches" />
+    <item
         android:id="@+id/settings"
         android:title="@string/settings" />
 

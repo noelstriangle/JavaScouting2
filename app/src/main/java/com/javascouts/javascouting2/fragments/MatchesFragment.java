@@ -1,8 +1,11 @@
 package com.javascouts.javascouting2.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -26,13 +29,22 @@ import com.javascouts.javascouting2.R;
 import com.javascouts.javascouting2.adapters.ActivityFragmentCommunication;
 import com.javascouts.javascouting2.adapters.MatchAdapter;
 import com.javascouts.javascouting2.room.Match;
+import com.javascouts.javascouting2.room.ScoresTypeConverter;
 import com.javascouts.javascouting2.room.TeamDatabase;
 import com.javascouts.javascouting2.room.UserDao;
 import com.opencsv.CSVWriter;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+
 import java.io.File;
 import java.io.FileWriter;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MatchesFragment extends Fragment {
 
@@ -157,7 +169,7 @@ public class MatchesFragment extends Fragment {
                             if (matches != null) {
                                 MatchAdapter ma = new MatchAdapter(context, R.layout.content_teamrow, matches);
                                 lv.setAdapter(ma);
-                                lv.setEmptyView(getActivity().findViewById(R.id.imageView2));
+//                                lv.setEmptyView(getActivity().findViewById(R.id.imageView2));
                                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -186,6 +198,7 @@ public class MatchesFragment extends Fragment {
         menu.findItem(R.id.deleteMatch).setVisible(false);
         menu.findItem(R.id.deleteTeam).setVisible(false);
         menu.findItem(R.id.export).setVisible(false);
+        menu.findItem(R.id.inport).setVisible(false);
         super.onCreateOptionsMenu(menu,menuInflater);
     }
 
@@ -269,6 +282,13 @@ public class MatchesFragment extends Fragment {
                 AlertDialog exporter= exportDialog.create();
                 exporter.show();
 
+            case R.id.inport2:
+
+                Toast.makeText(getContext(), "Please select an exported database!", Toast.LENGTH_LONG).show();
+                doImport();
+
+                return true;
+
             case R.id.settings:
                 return false;
         }
@@ -286,10 +306,10 @@ public class MatchesFragment extends Fragment {
             Cursor curCSV = db.query("SELECT * FROM matches", null);
             csvWriter.writeNext(curCSV.getColumnNames());
             while (curCSV.moveToNext()) {
-                String arrStr[] = {curCSV.getString(1) + " ", curCSV.getString(2) + " ",
-                        curCSV.getString(3) + " ", curCSV.getString(4) + " ",
-                        curCSV.getString(5) + " ", curCSV.getString(6) + " ",
-                        curCSV.getString(7) + " ", curCSV.getString(8) + " "};
+                String arrStr[] = {curCSV.getString(0) + " ", curCSV.getString(1) + " ",
+                        curCSV.getString(2) + " ", curCSV.getString(3) + " ",
+                        curCSV.getString(4) + " ", curCSV.getString(5) + " ",
+                        curCSV.getString(6) + " "};
                 csvWriter.writeNext(arrStr);
             }
             csvWriter.close();
@@ -301,6 +321,80 @@ public class MatchesFragment extends Fragment {
         }
 
 
+    }
+
+    private void importFromDatabase(Uri input) {
+
+        try {
+
+            InputStream fileInputStream = Objects.requireNonNull(getContext()).getContentResolver().openInputStream(input);
+            CSVParser parser = CSVParser.parse(Objects.requireNonNull(fileInputStream), Charset.defaultCharset(), CSVFormat.DEFAULT);
+            List<CSVRecord> toAdd = parser.getRecords();
+            final List<Match> toPush = new ArrayList<>();
+            for (int i = 1; i < toAdd.size(); i++) {
+
+                Match m = new Match();
+                CSVRecord curr = toAdd.get(i);
+                m.id = Integer.valueOf(curr.get(0).trim());
+                m.matchNumber = Integer.valueOf(curr.get(1).trim());
+                m.blue1 = Integer.valueOf(curr.get(2).trim());
+                m.blue2 = Integer.valueOf(curr.get(3).trim());
+                m.red1 = Integer.valueOf(curr.get(4).trim());
+                m.red2 = Integer.valueOf(curr.get(5).trim());
+                m.results = ScoresTypeConverter.toList(String.valueOf(curr.get(6).trim()));
+
+                toPush.add(m);
+
+            }
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (Match m : toPush) {
+
+                        dao.insertMatches(m);
+                        Log.d("USER", "Match pushed: " + String.valueOf(m.matchNumber));
+
+                    }
+                }
+            }).start();
+
+        } catch (Exception e) {
+
+            Log.e("USER", e.getMessage(), e);
+
+        }
+
+    }
+
+    private static final int READ_REQUEST_CODE = 42;
+
+    public void doImport() {
+
+        // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file
+        // browser.
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+
+        intent.setType("text/*");
+
+        startActivityForResult(intent, READ_REQUEST_CODE);
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode,
+                                 Intent resultData) {
+
+        if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            // The document selected by the user won't be returned in the intent.
+            // Instead, a URI to that document will be contained in the return intent
+            // provided to this method as a parameter.
+            // Pull that URI using resultData.getData().
+            Uri uri;
+            if (resultData != null) {
+                uri = resultData.getData();
+                importFromDatabase(uri);
+            }
+        }
     }
 
 }

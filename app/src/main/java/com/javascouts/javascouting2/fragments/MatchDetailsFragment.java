@@ -39,7 +39,7 @@ public class MatchDetailsFragment extends Fragment {
     Team r1, r2, b1, b2;
     Match match;
     TextView number;
-    TableLayout tl;
+    TableLayout tl, pl;
     EditText ra, rt, re, ba, bt, be;
     Button save;
 
@@ -55,7 +55,7 @@ public class MatchDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             id = getArguments().getInt("ID");
-            Log.d("ID",Integer.valueOf(id).toString());
+            Log.d("ID", Integer.valueOf(id).toString());
         }
         setHasOptionsMenu(true);
 
@@ -71,7 +71,7 @@ public class MatchDetailsFragment extends Fragment {
                 @Override
                 public void run() {
                     match = dao.getMatchById(id);
-                    Log.d("USER","Match number received: "+String.valueOf(match.matchNumber));
+                    Log.d("USER", "Match number received: " + String.valueOf(match.matchNumber));
                     r1 = dao.getTeamByTeamNumber(match.red1);
                     r2 = dao.getTeamByTeamNumber(match.red2);
                     b1 = dao.getTeamByTeamNumber(match.blue1);
@@ -93,8 +93,40 @@ public class MatchDetailsFragment extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            number.setText(String.valueOf(match.matchNumber));
-                            populateTable(tl, r1, r2, b1, b2);
+                            try {
+                                number.setText(String.valueOf(match.matchNumber));
+                                populateTable(tl, r1, r2, b1, b2);
+                                TableRow row = new TableRow(getContext());
+
+                                TextView tempView = new TextView(getContext());
+                                tempView.setText(String.valueOf(sumPoints(r1) + sumPoints(r2)));
+                                tempView.setTextSize(22);
+                                tempView.setBackground(getActivity().getDrawable(R.drawable.line_divider));
+                                tempView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                                tempView.setTextColor(getResources().getColor(R.color.red));
+                                row.addView(tempView, 0);
+
+                                tempView = new TextView(getContext());
+                                tempView.setText(String.valueOf(sumPoints(b1) + sumPoints(b2)));
+                                tempView.setTextSize(22);
+                                tempView.setBackground(getActivity().getDrawable(R.drawable.line_divider));
+                                tempView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                                tempView.setTextColor(getResources().getColor(R.color.blue));
+                                row.addView(tempView, 1);
+
+                                pl.addView(row);
+                                pl.setStretchAllColumns(true);
+
+                            } catch (NullPointerException e) {
+
+                                Toast toast = new Toast(getContext()).makeText(getContext(), "One or more teams don't exist.", Toast.LENGTH_SHORT);
+                                toast.show();
+                                FragmentManager fm = getFragmentManager();
+                                fm.popBackStack();
+                                e.printStackTrace();
+
+                            }
+
                         }
                     });
 
@@ -111,15 +143,22 @@ public class MatchDetailsFragment extends Fragment {
                                 t0[4] = Integer.valueOf(bt.getText().toString());
                                 t0[5] = Integer.valueOf(be.getText().toString());
                                 if (!match.updated) {
+                                    r1.standardDeviation = r1.standardDeviation + ((t0[0] / 2) + (t0[1] / 2) + (t0[2] / 2)) - (r1.autoPoints + r1.telePoints + r1.endPoints);
                                     r1.autoPoints = (r1.autoPoints + t0[0]) / 2;
                                     r1.telePoints = (r1.telePoints + t0[1]) / 2;
                                     r1.endPoints = (r1.endPoints + t0[2]) / 2;
+
+                                    r2.standardDeviation = r2.standardDeviation + ((t0[0] / 2) + (t0[1] / 2) + (t0[2] / 2)) - (r2.autoPoints + r2.telePoints + r2.endPoints);
                                     r2.autoPoints = (r2.autoPoints + t0[0]) / 2;
                                     r2.telePoints = (r2.telePoints + t0[1]) / 2;
                                     r2.endPoints = (r2.endPoints + t0[2]) / 2;
+
+                                    b1.standardDeviation = b1.standardDeviation + ((t0[3] / 2) + (t0[4] / 2) + (t0[5] / 2)) - (b1.autoPoints + b1.telePoints + b1.endPoints);
                                     b1.autoPoints = (b1.autoPoints + t0[3]) / 2;
                                     b1.telePoints = (b1.telePoints + t0[4]) / 2;
                                     b1.endPoints = (b1.endPoints + t0[5]) / 2;
+
+                                    b2.standardDeviation = b2.standardDeviation + ((t0[3] / 2) + (t0[4] / 2) + (t0[5] / 2)) - (b2.autoPoints + b2.telePoints + b2.endPoints);
                                     b2.autoPoints = (b2.autoPoints + t0[3]) / 2;
                                     b2.telePoints = (b2.telePoints + t0[4]) / 2;
                                     b2.endPoints = (b2.endPoints + t0[5]) / 2;
@@ -154,8 +193,14 @@ public class MatchDetailsFragment extends Fragment {
                 }
             }).start();
         } else {
-            Log.d("USER","DAO is null.");
+            Log.d("USER", "DAO is null.");
         }
+
+    }
+
+    private int sumPoints(Team t) {
+
+        return t.autoPoints + t.telePoints + t.endPoints;
 
     }
 
@@ -182,6 +227,7 @@ public class MatchDetailsFragment extends Fragment {
 
         number = view.findViewById(R.id.number);
         tl = view.findViewById(R.id.matchTable);
+        pl = view.findViewById(R.id.predictionTable);
         save = view.findViewById(R.id.save);
         ra = view.findViewById(R.id.autoResultr);
         ba = view.findViewById(R.id.autoResultb);
@@ -193,7 +239,6 @@ public class MatchDetailsFragment extends Fragment {
     }
 
 
-
     private TableRow createRow(Team r1, Team r2, Team b1, Team b2, String id) {
 
         TableRow temp = new TableRow(getContext());
@@ -203,39 +248,39 @@ public class MatchDetailsFragment extends Fragment {
         tempView.setTextSize(22);
         tempView.setBackground(getActivity().getDrawable(R.drawable.line_divider));
         tempView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        temp.addView(tempView,0);
+        temp.addView(tempView, 0);
 
         tempView = new TextView(getContext());
-        tempView.setText(getInfo(id,r1),0,getInfo(id,r1).length);
+        tempView.setText(getInfo(id, r1), 0, getInfo(id, r1).length);
         tempView.setTextSize(22);
         tempView.setBackground(getActivity().getDrawable(R.drawable.line_divider));
         tempView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         tempView.setTextColor(getResources().getColor(R.color.red));
-        temp.addView(tempView,1);
+        temp.addView(tempView, 1);
 
         tempView = new TextView(getContext());
-        tempView.setText(getInfo(id,r2),0,getInfo(id,r2).length);
+        tempView.setText(getInfo(id, r2), 0, getInfo(id, r2).length);
         tempView.setTextSize(22);
         tempView.setBackground(getActivity().getDrawable(R.drawable.line_divider));
         tempView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         tempView.setTextColor(getResources().getColor(R.color.red));
-        temp.addView(tempView,2);
+        temp.addView(tempView, 2);
 
         tempView = new TextView(getContext());
-        tempView.setText(getInfo(id,b1),0,getInfo(id,b1).length);
+        tempView.setText(getInfo(id, b1), 0, getInfo(id, b1).length);
         tempView.setTextSize(22);
         tempView.setBackground(getActivity().getDrawable(R.drawable.line_divider));
         tempView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         tempView.setTextColor(getResources().getColor(R.color.blue));
-        temp.addView(tempView,3);
+        temp.addView(tempView, 3);
 
         tempView = new TextView(getContext());
-        tempView.setText(getInfo(id,b2),0,getInfo(id,b2).length);
+        tempView.setText(getInfo(id, b2), 0, getInfo(id, b2).length);
         tempView.setTextSize(22);
         tempView.setBackground(getActivity().getDrawable(R.drawable.line_divider));
         tempView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         tempView.setTextColor(getResources().getColor(R.color.blue));
-        temp.addView(tempView,4);
+        temp.addView(tempView, 4);
 
         return temp;
 
@@ -246,17 +291,17 @@ public class MatchDetailsFragment extends Fragment {
 
         try {
 
-            tl.addView(createRow(r1,r2,b1,b2,"NUMBER"),0);
-            tl.addView(createRow(r1,r2,b1,b2,"LAND"),1);
-            tl.addView(createRow(r1,r2,b1,b2,"SAMPLE"),2);
-            tl.addView(createRow(r1,r2,b1,b2,"CLAIM"),3);
-            tl.addView(createRow(r1,r2,b1,b2,"NUM DEPOT"),4);
-            tl.addView(createRow(r1,r2,b1,b2,"NUM LANDER"),5);
-            tl.addView(createRow(r1,r2,b1,b2,"PARK"),6);
-            tl.addView(createRow(r1,r2,b1,b2,"LATCH"),7);
+            tl.addView(createRow(r1, r2, b1, b2, "NUMBER"), 0);
+            tl.addView(createRow(r1, r2, b1, b2, "LAND"), 1);
+            tl.addView(createRow(r1, r2, b1, b2, "SAMPLE"), 2);
+            tl.addView(createRow(r1, r2, b1, b2, "CLAIM"), 3);
+            tl.addView(createRow(r1, r2, b1, b2, "NUM DEPOT"), 4);
+            tl.addView(createRow(r1, r2, b1, b2, "NUM LANDER"), 5);
+            tl.addView(createRow(r1, r2, b1, b2, "PARK"), 6);
+            tl.addView(createRow(r1, r2, b1, b2, "LATCH"), 7);
             tl.setStretchAllColumns(true);
 
-        } catch(NullPointerException e) {
+        } catch (NullPointerException e) {
 
             Toast toast = new Toast(getContext()).makeText(getContext(), "One or more teams don't exist.", Toast.LENGTH_SHORT);
             toast.show();
@@ -269,11 +314,11 @@ public class MatchDetailsFragment extends Fragment {
 
     public char[] getInfo(String id, Team team) {
 
-        if(id.equals("NUMBER")) {
+        if (id.equals("NUMBER")) {
             return String.valueOf(team.teamNumber).toCharArray();
         }
-        if(id.equals("LAND")) {
-            if(team.canLand) {
+        if (id.equals("LAND")) {
+            if (team.canLand) {
                 char[] temp = new char[1];
                 temp[0] = '\u2713';
                 return temp;
@@ -283,8 +328,8 @@ public class MatchDetailsFragment extends Fragment {
                 return temp;
             }
         }
-        if(id.equals("SAMPLE")) {
-            if(team.canSample) {
+        if (id.equals("SAMPLE")) {
+            if (team.canSample) {
                 char[] temp = new char[1];
                 temp[0] = '\u2713';
                 return temp;
@@ -294,8 +339,8 @@ public class MatchDetailsFragment extends Fragment {
                 return temp;
             }
         }
-        if(id.equals("CLAIM")) {
-            if(team.canClaim) {
+        if (id.equals("CLAIM")) {
+            if (team.canClaim) {
                 char[] temp = new char[1];
                 temp[0] = '\u2713';
                 return temp;
@@ -305,14 +350,14 @@ public class MatchDetailsFragment extends Fragment {
                 return temp;
             }
         }
-        if(id.equals("NUM DEPOT")) {
+        if (id.equals("NUM DEPOT")) {
             return String.valueOf(team.depotMinerals).toCharArray();
         }
-        if(id.equals("NUM LANDER")) {
+        if (id.equals("NUM LANDER")) {
             return String.valueOf(team.landerMinerals).toCharArray();
         }
-        if(id.equals("PARK")) {
-            if(team.canPark) {
+        if (id.equals("PARK")) {
+            if (team.canPark) {
                 char[] temp = new char[1];
                 temp[0] = '\u2713';
                 return temp;
@@ -322,8 +367,8 @@ public class MatchDetailsFragment extends Fragment {
                 return temp;
             }
         }
-        if(id.equals("LATCH")) {
-            if(team.canLatch) {
+        if (id.equals("LATCH")) {
+            if (team.canLatch) {
                 char[] temp = new char[1];
                 temp[0] = '\u2713';
                 return temp;
@@ -344,6 +389,8 @@ public class MatchDetailsFragment extends Fragment {
         menu.findItem(R.id.deleteTeam).setVisible(false);
         menu.findItem(R.id.export).setVisible(false);
         menu.findItem(R.id.export2).setVisible(false);
+        menu.findItem(R.id.inport).setVisible(false);
+        menu.findItem(R.id.inport2).setVisible(false);
         super.onCreateOptionsMenu(menu, menuInflater);
     }
 

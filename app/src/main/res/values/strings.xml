@@ -61,5 +61,7 @@
     <string name="export_teams">Export Teams</string>
     <string name="export_matches">Export Matches</string>
     <string name="do_export">The resulting csv file will be located in the downloads folder. It can be loaded into a viewer or be sent and imported into the app. Continue?</string>
+    <string name="import_teams">Import Teams</string>
+    <string name="import_matches">Import Matches</string>
 
 </resources>

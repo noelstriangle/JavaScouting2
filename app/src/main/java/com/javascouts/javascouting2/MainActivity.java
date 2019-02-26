@@ -1,8 +1,12 @@
 package com.javascouts.javascouting2;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -10,6 +14,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.javascouts.javascouting2.adapters.ActivityFragmentCommunication;
 import com.javascouts.javascouting2.fragments.AnalysisFragment;
@@ -25,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements ActivityFragmentC
     private UserDao dao;
     private TeamDatabase db;
     ActionBar bar;
+    private final int REQUEST = 112;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +72,14 @@ public class MainActivity extends AppCompatActivity implements ActivityFragmentC
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            String[] PERMISSIONS = {android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            if (!hasPermissions(MainActivity.this, PERMISSIONS)) {
+                ActivityCompat.requestPermissions(MainActivity.this, PERMISSIONS, REQUEST);
+            }
+        }
 
     }
 
@@ -140,10 +154,30 @@ public class MainActivity extends AppCompatActivity implements ActivityFragmentC
                 return false;
             case R.id.deleteTeam:
                 return false;
+            case R.id.export:
+                return false;
+            case R.id.export2:
+                return false;
+            case R.id.inport:
+                return false;
+            case R.id.inport2:
+                return false;
             case R.id.settings:
-                break;
+                return true;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST: {
+                if (grantResults.length <= 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(MainActivity.this, "Permissions were not granted!", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 
     @Override
@@ -169,6 +203,17 @@ public class MainActivity extends AppCompatActivity implements ActivityFragmentC
     @Override
     public void setCurrent(String current) {
         this.current = current;
+    }
+
+    private static boolean hasPermissions(Context context, String... permissions) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
 }
