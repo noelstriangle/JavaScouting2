@@ -47,6 +47,7 @@ With a clear end goal for the app in mind, I redesigned the user's navigation sy
 One major changes is using more data collection to make even better analysis. Instead of just using what teams say they could do, we now use what the team can actually do. We had to decide on what data would be easiest for a team to collect. Obviously, the data we used last year (just scouting data) is extremely easy to collect, so that stays in. The autonomous, teleop, and endgame scores are also relatively accessible: have one person keep an eye on the match result screen and take a picture of it. The most detailed data is really hard to acquire: they require a team of people to watch every robot on every match and detail what it could do. I figured the most useful data to add would be the match results.
 
 ![](/pics/pic2.jpg)
+
 With this data, for every match a team participates in, the team's average autonomous, teleop, and endgame scores are updated. 
 
 ```java
@@ -136,8 +137,9 @@ if (teams.size() != 0) {
 }
 ```
 
-UI:
 ![](/pics/pic4.jpg)
+
+
 #### Importing and Exporting
 
 The previous year, we did have an exporting feature. However, this proved to be mostly pointless. This year, I decided to add an import feature. This way, a team member who does the scouting can collaborate with a team member who records match data.
@@ -188,9 +190,11 @@ for (int i = 1; i < toAdd.size(); i++) {
 Instead of displaying data in sentences (shown in an above pic), we now use charts.
 
 Team data:
+
 ![](/pics/pic6.jpg)
 
 Match data:
+
 ![](/pics/pic7.jpg)
 
 ---
