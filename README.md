@@ -24,8 +24,8 @@ The main point of the app is to be an easy way for teams to scout other teams. O
 
 If the user wants to see the details on the teams they added, they can click on a team's list item. This will bring up a screen detailing the abilities of the other team: in sentence form. In addition, the picture (if present) was displayed. From this screen, the user had the option to delete the team selected, or to edit the team's information.
 
-The old way:
 ![](/pics/pic1.png)
+
 On the main screen, the user could also choose to delete all the teams currently in the database, or export the information into a .csv file, which could be viewed from Google Sheets or other excel-like program, and shared with the team (or competition).
 
 ### Matches
