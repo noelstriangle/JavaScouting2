@@ -20,13 +20,13 @@ The app is designed to be used during a competition. Functionality based on acti
 
 ### Scouting
 
-The main point of the app is to be an easy way for teams to scout other teams. On the main screen, a user can decide to scout a team. When the "add" button is clicked, it brings up an activity which contains questions about the other team's abilities. When the user finishes updating the team, the team's information is stored in a local database. The app returns to the main screen, and the user can see the team they added, in a list. This process can be repeated as nessecary until all teams are scouted. The user can also take a picture.
+The main point of the app is to be an easy way for teams to *scout other teams*. On the main screen, a user can decide to scout a team. When the "add" button is clicked, it brings up an activity which contains questions about the other team's abilities. When the user finishes updating the team, the team's information is stored in a *local database*. The app returns to the main screen, and the user can see the team they added, in a list. This process can be repeated as nessecary until all teams are scouted. The user can also take a picture.
 
 If the user wants to see the details on the teams they added, they can click on a team's list item. This will bring up a screen detailing the abilities of the other team: in sentence form. In addition, the picture (if present) was displayed. From this screen, the user had the option to delete the team selected, or to edit the team's information.
 
 ![](/pics/pic1.png)
 
-On the main screen, the user could also choose to delete all the teams currently in the database, or export the information into a .csv file, which could be viewed from Google Sheets or other excel-like program, and shared with the team (or competition).
+On the main screen, the user could also choose to delete all the teams currently in the database, or *export* the information into a .csv file, which could be viewed from Google Sheets or other excel-like program, and shared with the team (or competition).
 
 ### Matches
 
@@ -38,9 +38,9 @@ The app's secondary feature was that of match "prediction". This consisted mainl
 
 ### Changes from version 1
 
-During the meantime, I felt the need to do a complete overhaul of the app. Previously, the app system was based off a numerous amount of "Activities", screens on which a certain layout is presented to the user. However, Activities are not meant to be hot-swapped for every UI event, from adding teams and removing teams. So, I learned and implemented the old activities as "Fragments", small containers for data which can easily be swapped.
+During the meantime, I felt the need to do a complete overhaul of the app. Previously, the app system was based off a numerous amount of "Activities", screens on which a certain layout is presented to the user. However, Activities are not meant to be hot-swapped for every UI event, from adding teams and removing teams. So, I learned and *implemented the old activities as "Fragments", small containers for data which can easily be swapped*.
 
-With a clear end goal for the app in mind, I redesigned the user's navigation system to, instead of using a "Drawer", use a Bottom Navigation Bar. This allows for the three main sections, the "Scouting", the "Schedule", and the "Analysis" to be easily viewable and selectable by the user. In addition, certain UI elements were modernized.
+With a clear end goal for the app in mind, I redesigned the user's navigation system to, instead of using a "Drawer", use a *Bottom Navigation Bar*. This allows for the three main sections, the "Scouting", the "Schedule", and the "Analysis" to be easily viewable and selectable by the user. In addition, certain UI elements were modernized.
 
 ### New functionality
 
@@ -85,14 +85,14 @@ We also wanted to help out teams by analysing the data more efficiently. Instead
 
 #### On Tensorflow Models
 
-When Keegan, a fellow team member received and began using an Orange Alliance api key, I refound my inspiration. I wanted to scrape The Orange Alliance and use a machine learning algorithm to be able the predict the best teams, in order to help with alliance selection. To do this, I learned Python and designed a script to scrape, merge, and train a TensorFlow Keras model on TOA data.
+When Keegan, a fellow team member received and began using an Orange Alliance api key, I refound my inspiration. I wanted to scrape The Orange Alliance and use a machine learning algorithm to be able the predict the best teams, in order to help with alliance selection. To do this, I learned Python and designed a script to *scrape, merge, and train a TensorFlow Keras model* on TOA data.
 1. The scrape runs as expected, pulling match data for all 15000-so teams in the OA database.
-2. The predictor is a simple Keras model. It takes 5 input nodes - Avg Auto Score, Avg Tele Score, Avg End Score, Avg Score, and Standard Deviation. It then outputs one node, a "KDR" or "Win/Loss" ratio. It was trained on the scraped data for 512 epochs running 256 cycles each. The best model is running the "Adam" optimizer and using mean-squared-error as its conditional.
+2. The predictor is a simple Keras model. It takes *5 input nodes* - Avg Auto Score, Avg Tele Score, Avg End Score, Avg Score, and Standard Deviation. It then outputs *one node*, a "KDR" or "Win/Loss" ratio. It was trained on the scraped data for 512 epochs running 256 cycles each. The best model is running the *"Adam" optimizer and using mean-squared-error* as its conditional.
 (Details can be found on keras.io)
 
 ![](/pics/pic3.png)
 
-3. The model was then exported as a tflite file, which can be used on most mobile devices quickly and resource-unintensive.
+3. The model was then exported as a *tflite file*, which can be used on most mobile devices quickly and resource-unintensive.
 
 The tflite model is now in the app, and used in the following way:
 
@@ -142,7 +142,7 @@ if (teams.size() != 0) {
 
 #### Importing and Exporting
 
-The previous year, we did have an exporting feature. However, this proved to be mostly pointless. This year, I decided to add an import feature. This way, a team member who does the scouting can collaborate with a team member who records match data.
+The previous year, we did have an exporting feature. However, this proved to be mostly pointless. This year, I kept the ouput while also deciding to add an *import feature*. This way, a team member who does the scouting can collaborate with a team member who records match data.
 
 I still wanted to use the .csv file format which is used last year. So, I used a Java library called OpenCSV to add the import feature.
 
@@ -150,7 +150,7 @@ The user is prompted to choose a text file.
 
 ![](/pics/pic5.jpg)
 
-The URI, or file location of the csv is parsed into memory with the following code:
+The URI, or file location of the csv is parsed into memory and updates the local database with the following code:
 
 ```java
 //open the file
@@ -187,7 +187,7 @@ for (int i = 1; i < toAdd.size(); i++) {
 
 #### Minor changes
 
-Instead of displaying data in sentences (shown in an above pic), we now use charts.
+Instead of displaying data in sentences (shown in an above pic), we now use *charts*.
 
 Team data:
 
