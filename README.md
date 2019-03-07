@@ -14,7 +14,7 @@ With the release of the Rover Ruckus season, we hoped to continue our app from l
 
 ---
 
-## Previous App Functionality (Ver 1)
+## Previous App Functionality (Version 1)
 
 The app is designed to be used during a competition. Functionality based on activity-switching. Only allowed scouting and using the scouting predictions to predict the match results.
 
@@ -25,7 +25,7 @@ The main point of the app is to be an easy way for teams to scout other teams. O
 If the user wants to see the details on the teams they added, they can click on a team's list item. This will bring up a screen detailing the abilities of the other team: in sentence form. In addition, the picture (if present) was displayed. From this screen, the user had the option to delete the team selected, or to edit the team's information.
 
 The old way:
-pic1
+![](/pics/pic1.png)
 
 On the main screen, the user could also choose to delete all the teams currently in the database, or export the information into a .csv file, which could be viewed from Google Sheets or other excel-like program, and shared with the team (or competition).
 
@@ -35,7 +35,7 @@ The app's secondary feature was that of match "prediction". This consisted mainl
 
 ---
 
-## New App Functionality
+## New App Functionality (Version 2)
 
 ### Changes from version 1
 
@@ -47,12 +47,13 @@ With a clear end goal for the app in mind, I redesigned the user's navigation sy
 
 One major changes is using more data collection to make even better analysis. Instead of just using what teams say they could do, we now use what the team can actually do. We had to decide on what data would be easiest for a team to collect. Obviously, the data we used last year (just scouting data) is extremely easy to collect, so that stays in. The autonomous, teleop, and endgame scores are also relatively accessible: have one person keep an eye on the match result screen and take a picture of it. The most detailed data is really hard to acquire: they require a team of people to watch every robot on every match and detail what it could do. I figured the most useful data to add would be the match results.
 
-pic2
+![](/pics/pic2.jpg)
 
 With this data, for every match a team participates in, the team's average autonomous, teleop, and endgame scores are updated. 
 
 ```java
-//add the standard deviation to the current average standard deviation( new total point data - old average point data)
+//add the standard deviation to the current average standard deviation( new total point data - 
+                                                                      old average point data)
 if (!match.updated) {
   r1.standardDeviation = r1.standardDeviation + ((t0[0] / 2) + (t0[1] / 2) + (t0[2] / 2)) - 
                                                 (r1.autoPoints + r1.telePoints + r1.endPoints);
@@ -90,7 +91,7 @@ When Keegan, a fellow team member received and began using an Orange Alliance ap
 2. The predictor is a simple Keras model. It takes 5 input nodes - Avg Auto Score, Avg Tele Score, Avg End Score, Avg Score, and Standard Deviation. It then outputs one node, a "KDR" or "Win/Loss" ratio. It was trained on the scraped data for 512 epochs running 256 cycles each. The best model is running the "Adam" optimizer and using mean-squared-error as its conditional.
 (Details can be found on keras.io)
 
-pic3
+![](/pics/pic3.png)
 
 3. The model was then exported as a tflite file, which can be used on most mobile devices quickly and resource-unintensive.
 
@@ -138,7 +139,7 @@ if (teams.size() != 0) {
 ```
 
 UI:
-pic4
+![](/pics/pic4.jpg)
 
 #### Importing and Exporting
 
@@ -148,7 +149,7 @@ I still wanted to use the .csv file format which is used last year. So, I used a
 
 The user is prompted to choose a text file.
 
-pic5
+![](/pics/pic5.jpg)
 
 The URI, or file location of the csv is parsed into memory with the following code:
 
@@ -190,10 +191,10 @@ for (int i = 1; i < toAdd.size(); i++) {
 Instead of displaying data in sentences (shown in an above pic), we now use charts.
 
 Team data:
-pic6
+![](/pics/pic6.jpg)
 
 Match data:
-pic7
+![](/pics/pic7.jpg)
 
 ---
 
