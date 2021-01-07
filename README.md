@@ -34,7 +34,7 @@ The main point of the app is to be an easy way for teams to *scout other teams*.
 
 If the user wants to see the details on the teams they added, they can click on a team's list item. This will bring up a screen detailing the abilities of the other team: in sentence form. In addition, the picture (if present) was displayed. From this screen, the user had the option to delete the team selected, or to edit the team's information.
 
-![](/pics/pic1.png)
+![](https://github.com/noelstriangle/JavaScouting2/blob/master/pics/pic1.png)
 
 On the main screen, the user could also choose to delete all the teams currently in the database, or *export* the information into a .csv file, which could be viewed from Google Sheets or other excel-like program, and shared with the team (or competition).
 
@@ -56,7 +56,7 @@ With a clear end goal for the app in mind, I redesigned the user's navigation sy
 
 One major changes is using more data collection to make even better analysis. Instead of just using what teams say they could do, we now use what the team can actually do. We had to decide on what data would be easiest for a team to collect. Obviously, the data we used last year (just scouting data) is extremely easy to collect, so that stays in. The autonomous, teleop, and endgame scores are also relatively accessible: have one person keep an eye on the match result screen and take a picture of it. The most detailed data is really hard to acquire: they require a team of people to watch every robot on every match and detail what it could do. I figured the most useful data to add would be the match results.
 
-![](/pics/pic2.jpg)
+![](https://github.com/noelstriangle/JavaScouting2/blob/master/pics/pic2.png)
 
 With this data, for every match a team participates in, the team's average autonomous, teleop, and endgame scores are updated. 
 
@@ -94,7 +94,7 @@ When Keegan, a fellow team member received and began using an Orange Alliance ap
 2. The predictor is a simple Keras model. It takes *5 input nodes* - Avg Auto Score, Avg Tele Score, Avg End Score, Avg Score, and Standard Deviation. It then outputs *one node*, a "KDR" or "Win/Loss" ratio. It was trained on the scraped data for 512 epochs running 256 cycles each. The best model is running the *"Adam" optimizer and using mean-squared-error* as its conditional.
 (Details can be found on keras.io)
 
-![](/pics/pic3.png)
+![](https://github.com/noelstriangle/JavaScouting2/blob/master/pics/pic3.png)
 
 3. The model was then exported as a *tflite file*, which can be used on most mobile devices quickly and resource-unintensive.
 
@@ -141,7 +141,7 @@ if (teams.size() != 0) {
 }
 ```
 
-![](/pics/pic4.jpg)
+![](https://github.com/noelstriangle/JavaScouting2/blob/master/pics/pic4.png)
 
 
 #### Importing and Exporting
@@ -152,7 +152,7 @@ I still wanted to use the .csv file format which is used last year. So, I used a
 
 The user is prompted to choose a text file.
 
-![](/pics/pic5.jpg)
+![](https://github.com/noelstriangle/JavaScouting2/blob/master/pics/pic5.png)
 
 The URI, or file location of the csv is parsed into memory and updates the local database with the following code:
 
@@ -195,10 +195,10 @@ Instead of displaying data in sentences (shown in an above pic), we now use *cha
 
 Team data:
 
-![](/pics/pic6.jpg)
+![](https://github.com/noelstriangle/JavaScouting2/blob/master/pics/pic6.png)
 
 Match data:
 
-![](/pics/pic7.jpg)
+![](https://github.com/noelstriangle/JavaScouting2/blob/master/pics/pic7.png)
 
 ---
