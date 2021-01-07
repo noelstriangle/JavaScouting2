@@ -56,7 +56,7 @@ With a clear end goal for the app in mind, I redesigned the user's navigation sy
 
 One major changes is using more data collection to make even better analysis. Instead of just using what teams say they could do, we now use what the team can actually do. We had to decide on what data would be easiest for a team to collect. Obviously, the data we used last year (just scouting data) is extremely easy to collect, so that stays in. The autonomous, teleop, and endgame scores are also relatively accessible: have one person keep an eye on the match result screen and take a picture of it. The most detailed data is really hard to acquire: they require a team of people to watch every robot on every match and detail what it could do. I figured the most useful data to add would be the match results.
 
-![](https://github.com/noelstriangle/JavaScouting2/blob/master/pics/pic2.png)
+![](https://github.com/noelstriangle/JavaScouting2/blob/master/pics/pic2.jpg)
 
 With this data, for every match a team participates in, the team's average autonomous, teleop, and endgame scores are updated. 
 
@@ -141,7 +141,7 @@ if (teams.size() != 0) {
 }
 ```
 
-![](https://github.com/noelstriangle/JavaScouting2/blob/master/pics/pic4.png)
+![](https://github.com/noelstriangle/JavaScouting2/blob/master/pics/pic4.jpg)
 
 
 #### Importing and Exporting
@@ -152,7 +152,7 @@ I still wanted to use the .csv file format which is used last year. So, I used a
 
 The user is prompted to choose a text file.
 
-![](https://github.com/noelstriangle/JavaScouting2/blob/master/pics/pic5.png)
+![](https://github.com/noelstriangle/JavaScouting2/blob/master/pics/pic5.jpg)
 
 The URI, or file location of the csv is parsed into memory and updates the local database with the following code:
 
@@ -195,10 +195,10 @@ Instead of displaying data in sentences (shown in an above pic), we now use *cha
 
 Team data:
 
-![](https://github.com/noelstriangle/JavaScouting2/blob/master/pics/pic6.png)
+![](https://github.com/noelstriangle/JavaScouting2/blob/master/pics/pic6.jpg)
 
 Match data:
 
-![](https://github.com/noelstriangle/JavaScouting2/blob/master/pics/pic7.png)
+![](https://github.com/noelstriangle/JavaScouting2/blob/master/pics/pic7.jpg)
 
 ---
