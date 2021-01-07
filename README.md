@@ -9,8 +9,11 @@ Things which will be added:
 # Java Scouting -- Maker Portfolio at MIT
 
 http://javascouts.weebly.com/ - team website
+
 https://play.google.com/store/apps/details?id=com.javascouts.ftcanalysis - play store
+
 https://github.com/noelstriangle/FTCAnalysis - version ONE github repository
+
 https://github.com/noelstriangle/JavaScouting2 - CURRENT version github repository
 
 **Keegan Birt (mentioned below) is also applying to MIT and with a Maker Portfolio!**
@@ -82,6 +85,7 @@ if (!match.updated) {
 We also wanted to help out teams by analysing the data more efficiently. Instead of just providing the information to the user, actively use it to make predictions about winners, and about the best teams. I've always been interested in machine learning, so I tried it.
 
 #### On Tensorflow Models
+
 https://repl.it/@noelstriangle/Analysis
 
 When Keegan, a fellow team member received and began using an Orange Alliance api key, I refound my inspiration. I wanted to scrape The Orange Alliance and use a machine learning algorithm to be able the predict the best teams, in order to help with alliance selection. To do this, I learned Python and designed a script to *scrape, merge, and train a TensorFlow Keras model* on TOA data.
