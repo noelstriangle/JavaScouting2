@@ -6,7 +6,14 @@ Things which will be added:
 - Schedule form and user interface
 - Match prediction and machine-learning generated alliance picker.
 
-# Essay on the functionality of the Java Scouting App
+# Java Scouting -- Maker Portfolio at MIT
+
+http://javascouts.weebly.com/ - team website
+https://play.google.com/store/apps/details?id=com.javascouts.ftcanalysis - play store
+https://github.com/noelstriangle/FTCAnalysis - version ONE github repository
+https://github.com/noelstriangle/JavaScouting2 - CURRENT version github repository
+
+**Keegan Birt (mentioned below) is also applying to MIT and with a Maker Portfolio!**
 
 The JavaScouting app is designed to help teams perform better at their tournaments, by allowing data collection and analysis to help strategize.
 
@@ -14,9 +21,9 @@ With the release of the Rover Ruckus season, we hoped to continue our app from l
 
 ---
 
-## Previous App Functionality (Version 1)
+## Previous App Functionality (Version 1) (NOT CURRENT)
 
-The app is designed to be used during a competition. Functionality based on activity-switching. Only allowed scouting and using the scouting predictions to predict the match results.
+The previous iteration of the app was limited in functionality and style due to my inexperience. After learning from that, I tackled the same project again from a fresh start. However, I am including a writeup on the previous version's behavior as a way to compare growth! 
 
 ### Scouting
 
@@ -65,27 +72,20 @@ if (!match.updated) {
   r2.autoPoints = (r2.autoPoints + t0[0]) / 2;
   r2.telePoints = (r2.telePoints + t0[1]) / 2;
   r2.endPoints = (r2.endPoints + t0[2]) / 2;  
-
-  b1.standardDeviation = b1.standardDeviation + ((t0[3] / 2) + (t0[4] / 2) + (t0[5] / 2)) - 
-                                                (b1.autoPoints + b1.telePoints + b1.endPoints);
-  b1.autoPoints = (b1.autoPoints + t0[3]) / 2;
-  b1.telePoints = (b1.telePoints + t0[4]) / 2;
-  b1.endPoints = (b1.endPoints + t0[5]) / 2;  
-
-  b2.standardDeviation = b2.standardDeviation + ((t0[3] / 2) + (t0[4] / 2) + (t0[5] / 2)) - 
-                                                (b2.autoPoints + b2.telePoints + b2.endPoints);
-  b2.autoPoints = (b2.autoPoints + t0[3]) / 2;
-  b2.telePoints = (b2.telePoints + t0[4]) / 2;
-  b2.endPoints = (b2.endPoints + t0[5]) / 2;
-  match.updated = true;
+  
+  //b1 and b2 ...
+  
 }
+
 ```
 
 We also wanted to help out teams by analysing the data more efficiently. Instead of just providing the information to the user, actively use it to make predictions about winners, and about the best teams. I've always been interested in machine learning, so I tried it.
 
 #### On Tensorflow Models
+https://repl.it/@noelstriangle/Analysis
 
 When Keegan, a fellow team member received and began using an Orange Alliance api key, I refound my inspiration. I wanted to scrape The Orange Alliance and use a machine learning algorithm to be able the predict the best teams, in order to help with alliance selection. To do this, I learned Python and designed a script to *scrape, merge, and train a TensorFlow Keras model* on TOA data.
+
 1. The scrape runs as expected, pulling match data for all 15000-so teams in the OA database.
 2. The predictor is a simple Keras model. It takes *5 input nodes* - Avg Auto Score, Avg Tele Score, Avg End Score, Avg Score, and Standard Deviation. It then outputs *one node*, a "KDR" or "Win/Loss" ratio. It was trained on the scraped data for 512 epochs running 256 cycles each. The best model is running the *"Adam" optimizer and using mean-squared-error* as its conditional.
 (Details can be found on keras.io)
@@ -198,5 +198,3 @@ Match data:
 ![](/pics/pic7.jpg)
 
 ---
-
-## Questions? See the JavaScouts in the pit, or contact us at javascouts@gmail.com. Follow the development of the app at github.com/noelstriangle/JavaScouting2 and keep an eye on the Google Play Store
